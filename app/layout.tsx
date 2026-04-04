@@ -1,12 +1,23 @@
-import { Geist, Geist_Mono, Merriweather, Source_Sans_3 } from "next/font/google"
+import {
+  Geist,
+  Geist_Mono,
+  Merriweather,
+  Source_Sans_3,
+} from "next/font/google"
 
-import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
+import "./globals.css"
 
-const sourceSans3Heading = Source_Sans_3({subsets:['latin'],variable:'--font-heading'});
+const sourceSans3Heading = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-heading",
+})
 
-const merriweather = Merriweather({subsets:['latin'],variable:'--font-serif'});
+const merriweather = Merriweather({
+  subsets: ["latin"],
+  variable: "--font-serif",
+})
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -27,7 +38,14 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontSans.variable, fontMono.variable, "font-serif", merriweather.variable, sourceSans3Heading.variable)}
+      className={cn(
+        "antialiased",
+        fontSans.variable,
+        fontMono.variable,
+        "font-serif",
+        merriweather.variable,
+        sourceSans3Heading.variable
+      )}
     >
       <body>
         <ThemeProvider>{children}</ThemeProvider>

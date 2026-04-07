@@ -5,8 +5,9 @@ import {
   Source_Sans_3,
 } from "next/font/google"
 
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/modules/layout/theme-provider"
 import { cn } from "@/lib/utils"
+// @ts-ignore
 import "./globals.css"
 
 const sourceSans3Heading = Source_Sans_3({

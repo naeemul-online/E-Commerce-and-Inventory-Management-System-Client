@@ -1,25 +1,26 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import z from "zod"
+import { z } from "zod"
 
-export const registerUserValidationZodSchema = z
-  .object({
-    // fullName: z.string().min(1, { message: "Name is required" }),
+export const registerSchema = z.object({
+  fullName: z
+    .string()
+    .min(1, "Full name must be at least 1 characters")
+    .transform((val) => val.trim().replace(/\s+/g, " ")),
+  phone: z
+    .string()
+    .min(8, "Invalid phone number")
+    .max(11, "Invalid phone number")
+    .regex(/^\d+$/, "Phone must contain only numbers")
+    .transform((val) => val.trim()),
 
-    email: z.email({ message: "Valid email is required" }),
-    password: z
-      .string()
-      .min(6, {
-        error: "Password is required and must be at least 6 characters long",
-      })
-      .max(100, {
-        error: "Password must be at most 100 characters long",
-      }),
-    confirmPassword: z.string().min(6, {
-      error:
-        "Confirm Password is required and must be at least 6 characters long",
-    }),
-  })
-  .refine((data: any) => data.password === data.confirmPassword, {
-    error: "Passwords do not match",
-    path: ["confirmPassword"],
-  })
+  email: z
+    .string()
+    .email("Invalid email address")
+    .optional()
+    .or(z.literal(""))
+    .transform((val) => val?.trim() || undefined),
+
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .max(8, "Password must be at most 8 characters"),
+})

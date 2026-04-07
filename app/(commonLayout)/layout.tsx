@@ -1,10 +1,11 @@
-import { Navbar1 } from "@/components/navbar1"
+import { Navbar1 } from "@/components/modules/layout/navbar1"
 
 const CommonLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <div className="container mx-auto w-full max-w-7xl">
+      <div className="mx-auto w-full max-w-6xl">
         <Navbar1 />
+
         {children}
       </div>
     </>

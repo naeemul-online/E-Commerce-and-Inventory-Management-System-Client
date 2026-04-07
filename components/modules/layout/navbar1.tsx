@@ -138,46 +138,9 @@ const Navbar1 = ({
         },
       ],
     },
-    {
-      title: "Flours & Lentils",
-      url: "#",
-      items: [
-        {
-          title: "Botanical Nuts",
-          description: "Get all the answers you need right here",
-          icon: <Zap className="size-5 shrink-0" />,
-          url: "nuts/botanical",
-        },
-        {
-          title: "Drupes",
-          description: "We are here to help you with any questions you have",
-          icon: <Sunset className="size-5 shrink-0" />,
-          url: "/nuts/drupes",
-        },
-        {
-          title: "Status",
-          description: "Check the current status of our services and APIs",
-          icon: <Trees className="size-5 shrink-0" />,
-          url: "#",
-        },
-        {
-          title: "Legumes",
-          description: "Our terms and conditions for using our services",
-          icon: <Book className="size-5 shrink-0" />,
-          url: "/nuts/legumes",
-        },
-      ],
-    },
+
     {
       title: "Rice",
-      url: "#",
-    },
-    {
-      title: "Certified",
-      url: "#",
-    },
-    {
-      title: "Pickle",
       url: "#",
     },
   ],
@@ -188,20 +151,19 @@ const Navbar1 = ({
   className,
 }: Navbar1Props) => {
   return (
-    <section className={cn("py-4", className)}>
-      <div className="container">
+    <section className={cn("md:py-4", className)}>
+      <div className="container mx-auto w-full max-w-6xl">
         {/* Desktop Menu */}
         <nav className="hidden items-center justify-between md:flex">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center lg:gap-6">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center justify-center">
               {/* <img
                 src={logo.src}
                 className="max-h-8 dark:invert"
                 alt={logo.alt}
               /> */}
               <NafiyaMartLogo />
-              <span className="text-lg font-semibold tracking-tighter"></span>
             </Link>
             <div className="flex items-center">
               <NavigationMenu>

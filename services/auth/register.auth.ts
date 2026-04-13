@@ -1,37 +1,27 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 
-import { zodValidator } from "@/lib/zodValidator"
-import { registerSchema } from "@/zod/auth.validation"
+import { serverFetch } from "@/lib/server-fetch"
+import { setCookie } from "@/lib/tokenHelper"
+import { RegisterRequest } from "@/types/auth"
 
-export const registerUser = async (
-  _currentState: any,
-  formData: any
-): Promise<any> => {
+export const registerUser = async (payload: RegisterRequest) => {
   try {
-    const payload = {
-      fullName: formData.get("fullName"),
-      phone: formData.get("phone"),
-      email: formData.get("email"),
-      password: formData.get("password"),
-    }
+    const res = await serverFetch.post("/auth/register", {
+      body: JSON.stringify(payload),
+    })
 
-    console.log("payload", payload)
+    const data = await res.json()
 
-    const validation = zodValidator(payload, registerSchema)
+    // ✅ store token
+    await setCookie("accessToken", data.data?.accessToken, {
+      httpOnly: true,
+      secure: true,
+      path: "/",
+    })
 
-    console.log("validation", validation)
-
-    if (!validation.success) {
-      return validation
-    }
-
-    const cleanData = validation.data
-    console.log("clean data", cleanData)
-
-    return cleanData
+    return data
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    // Re-throw NEXT_REDIRECT errors so Next.js can handle them
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
       throw error
     }

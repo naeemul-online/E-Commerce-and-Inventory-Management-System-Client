@@ -1,6 +1,6 @@
 const NafiyaMartLogo = () => {
   return (
-    <div className="p-2 text-xl font-bold lg:p-4 lg:text-2xl">
+    <div className="text-xs font-bold md:text-xl">
       <span className="text-primary">Nafiya</span> Mart
     </div>
   )

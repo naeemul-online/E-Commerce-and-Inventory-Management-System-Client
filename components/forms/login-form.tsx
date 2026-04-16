@@ -20,7 +20,7 @@ import {
 import { login } from "@/services/auth/login.auth"
 import Link from "next/link"
 
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { toast } from "sonner"
 import {
   Field,
@@ -30,6 +30,11 @@ import {
 } from "../ui/field"
 import PasswordField from "./PasswordField"
 import PhoneInputField from "./PhoneInputField"
+import {
+  getDefaultDashboardRoute,
+  isValidRedirectForRole,
+  UserRole,
+} from "@/lib/auth-utils"
 
 export default function LoginForm({
   className,
@@ -37,10 +42,12 @@ export default function LoginForm({
 }: React.ComponentProps<"div">) {
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectParam = searchParams.get("redirect")
   const form = useForm<LoginInput, unknown, LoginOutput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      phone: "+8801710192757",
+      phone: "+96541128440",
       password: "1234567",
     },
   })
@@ -54,20 +61,26 @@ export default function LoginForm({
     const result = await login(payload)
 
     if (!result.success) {
-      toast.error(result.message || "Registration failed. Please try again.")
-    } else if (result.data?.user.role === "ADMIN") {
-      router.push("/admin/dashboard")
-      toast.success(
-        "Registration successful! Welcome, " + result.user?.fullName
-      )
-      form.reset()
-    } else if (result.data?.user.role === "USER") {
-      router.push("/user/dashboard")
-      toast.success(
-        "Registration successful! Welcome, " + result.user?.fullName
-      )
-      form.reset()
+      toast.error(result.message || "Login failed. Please try again.")
+      return
     }
+
+    const role = result.data?.user?.role as UserRole | undefined
+    if (!role) {
+      toast.error("Login succeeded but user role is missing.")
+      return
+    }
+
+    const destination =
+      redirectParam && isValidRedirectForRole(redirectParam, role)
+        ? redirectParam
+        : getDefaultDashboardRoute(role)
+
+    router.replace(destination)
+    toast.success(
+      "Login successful! Welcome, " + (result.data?.user?.fullName || "")
+    )
+    form.reset()
   }
 
   return (

@@ -1,32 +1,51 @@
 export type UserRole = "SUPER_ADMIN" | "ADMIN" | "USER"
 
-// exact : ["/my-profile", "settings"]
-//   patterns: [/^\/dashboard/, /^\/patient/], // Routes starting with /dashboard/* /patient/*
 export type RouteConfig = {
   exact: string[]
   patterns: RegExp[]
 }
 
+/**
+ * Routes that should remain accessible without authentication.
+ * (Use pathname-only values; query strings are not part of `pathname`.)
+ */
 export const authRoutes = ["/login", "/register"]
 
+/**
+ * Routes that require authentication but are shared across roles.
+ * Keep these **outside** `/user`, `/admin`, `/super-admin` prefixes.
+ */
 export const commonProtectedRoutes: RouteConfig = {
-  exact: ["/profile", "/profile/:id", "edit-profile/:id"],
-  patterns: [], // [/password/change-password, /password/reset-password => /password/*]
+  exact: ["/profile", "/settings", "/account"],
+  patterns: [
+    /^\/profile(\/.*)?$/,
+    /^\/settings(\/.*)?$/,
+    /^\/account(\/.*)?$/,
+  ],
 }
 
-export const hostProtectedRoutes: RouteConfig = {
-  patterns: [/^\/super-admin/], // Routes starting with /doctor/* , /assitants, /appointments/*
-  exact: [], // "/assistants"
+/**
+ * Super admin area: full control (users, admins, inventory, orders, deliveries).
+ */
+export const superAdminProtectedRoutes: RouteConfig = {
+  patterns: [/^\/super-admin(\/.*)?$/],
+  exact: [],
 }
 
+/**
+ * Admin area: manage orders, users, delivery, inventory, and own profile/settings.
+ */
 export const adminProtectedRoutes: RouteConfig = {
-  patterns: [/^\/admin/], // Routes starting with /admin/*
-  exact: [], // "/admins"
+  patterns: [/^\/admin(\/.*)?$/],
+  exact: [],
 }
 
+/**
+ * User area: dashboard, orders, tracking, profile essentials.
+ */
 export const userProtectedRoutes: RouteConfig = {
-  patterns: [/^\/user/], // Routes starting with /dashboard/*
-  exact: [], // "/dashboard"
+  patterns: [/^\/user(\/.*)?$/],
+  exact: [],
 }
 
 export const isAuthRoute = (pathname: string) => {
@@ -47,10 +66,10 @@ export const isRouteMatches = (
 export const getRouteOwner = (
   pathname: string
 ): "SUPER_ADMIN" | "ADMIN" | "USER" | "COMMON" | null => {
-  if (isRouteMatches(pathname, adminProtectedRoutes)) {
+  if (isRouteMatches(pathname, superAdminProtectedRoutes)) {
     return "SUPER_ADMIN"
   }
-  if (isRouteMatches(pathname, hostProtectedRoutes)) {
+  if (isRouteMatches(pathname, adminProtectedRoutes)) {
     return "ADMIN"
   }
   if (isRouteMatches(pathname, userProtectedRoutes)) {

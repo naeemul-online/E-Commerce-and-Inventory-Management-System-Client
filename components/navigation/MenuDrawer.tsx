@@ -5,7 +5,6 @@ import { Separator } from "@/components/ui/separator"
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
@@ -15,9 +14,10 @@ import {
   type MenuBarCategory,
 } from "@/constants/navigation"
 import { cn } from "@/lib/utils"
-import { ChevronDown, ChevronRight } from "lucide-react"
+import { ChevronDown, ChevronRight, LogInIcon } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
+import { Button } from "../ui/button"
 
 interface MenuDrawerProps {
   isOpen: boolean
@@ -106,10 +106,14 @@ export function MenuDrawer({ isOpen, onClose }: MenuDrawerProps) {
         className="flex w-full flex-col p-0 sm:max-w-sm"
       >
         <SheetHeader className="p-4 pb-0">
-          <SheetTitle className="text-left">Menu</SheetTitle>
-          <SheetDescription className="text-left">
-            Browse our categories and shop
-          </SheetDescription>
+          <SheetTitle className="text-left">Hello there!</SheetTitle>
+
+          <Link href="/login">
+            <Button variant="outline">
+              <LogInIcon className="h-4 w-4" />
+              Signin
+            </Button>
+          </Link>
         </SheetHeader>
 
         <ScrollArea className="flex-1">

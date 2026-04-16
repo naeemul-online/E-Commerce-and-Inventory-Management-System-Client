@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { HeroSlider } from "@/components/ui/HeroSlider"
 import { useCart } from "@/contexts/cart-context"
 
-import { RotateCcw, Shield, ShoppingCart, Star, Truck } from "lucide-react"
+import { ShoppingCart, Star } from "lucide-react"
 import Image from "next/image"
 
 const featuredProducts = [
@@ -14,7 +14,7 @@ const featuredProducts = [
     name: "Wireless Headphones",
     price: 149.99,
     image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
+      "https://res.cloudinary.com/dsieyc8m2/image/upload/v1776360259/g1b6li1pzvf73qu59dn5.webp",
     rating: 4.8,
     reviews: 234,
     badge: "Best Seller",
@@ -24,7 +24,7 @@ const featuredProducts = [
     name: "Minimalist Watch",
     price: 199.99,
     image:
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop",
+      "https://res.cloudinary.com/dsieyc8m2/image/upload/v1776360259/g1b6li1pzvf73qu59dn5.webp",
     rating: 4.9,
     reviews: 189,
     badge: "New",
@@ -34,7 +34,7 @@ const featuredProducts = [
     name: "Leather Backpack",
     price: 129.99,
     image:
-      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop",
+      "https://res.cloudinary.com/dsieyc8m2/image/upload/v1776360259/g1b6li1pzvf73qu59dn5.webp",
     rating: 4.7,
     reviews: 156,
   },
@@ -43,27 +43,9 @@ const featuredProducts = [
     name: "Sunglasses Pro",
     price: 89.99,
     image:
-      "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop",
+      "https://res.cloudinary.com/dsieyc8m2/image/upload/v1776360259/g1b6li1pzvf73qu59dn5.webp",
     rating: 4.6,
     reviews: 98,
-  },
-]
-
-const features = [
-  {
-    icon: Truck,
-    title: "Free Shipping",
-    description: "On orders over $50",
-  },
-  {
-    icon: Shield,
-    title: "Secure Payment",
-    description: "100% protected",
-  },
-  {
-    icon: RotateCcw,
-    title: "Easy Returns",
-    description: "30-day return policy",
   },
 ]
 
@@ -84,35 +66,6 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <HeroSlider />
-      {/* 
-      Features Bar
-      <section className="border-y bg-muted/50 py-6">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {features.map((feature) => {
-              const Icon = feature.icon
-              return (
-                <div
-                  key={feature.title}
-                  className="flex items-center justify-center gap-4 md:justify-start"
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                    <Icon className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">
-                      {feature.title}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {feature.description}
-                    </p>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section> */}
 
       {/* Featured Products */}
       <section className="py-16">

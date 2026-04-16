@@ -15,7 +15,7 @@ const sliderItems = [
     description:
       "Pure, natural honey sourced directly from the finest apiaries",
     image:
-      "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=1200&h=600&fit=crop",
+      "https://res.cloudinary.com/dsieyc8m2/image/upload/v1776355398/usqrn36gjo0ywtdrrcf4.webp",
     cta: "Shop Now",
     href: "/category/honey",
     bgColor: "from-amber-50 to-orange-100",
@@ -26,7 +26,7 @@ const sliderItems = [
     subtitle: "Exotic Dates Collection",
     description: "Handpicked dates from the finest farms of Middle East",
     image:
-      "https://images.unsplash.com/photo-1593233874143-8c3e2a1c1f1a?w=1200&h=600&fit=crop",
+      "https://res.cloudinary.com/dsieyc8m2/image/upload/v1776355398/usqrn36gjo0ywtdrrcf4.webp",
     cta: "Explore",
     href: "/category/dates",
     bgColor: "from-amber-100 to-yellow-50",
@@ -37,7 +37,7 @@ const sliderItems = [
     subtitle: "Nuts & Seeds Combo",
     description: "Get 30% off on our premium mixed nuts collection",
     image:
-      "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=1200&h=600&fit=crop",
+      "https://res.cloudinary.com/dsieyc8m2/image/upload/v1776355398/usqrn36gjo0ywtdrrcf4.webp",
     cta: "Get Offer",
     href: "/category/nuts-seeds",
     bgColor: "from-green-50 to-emerald-100",
@@ -49,7 +49,7 @@ const specialOffer = {
   subtitle: "Buy 2 Get 1 Free",
   description: "On all spices",
   image:
-    "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=600&fit=crop",
+    "https://res.cloudinary.com/dsieyc8m2/image/upload/v1776355398/usqrn36gjo0ywtdrrcf4.webp",
   href: "/category/spices",
   bgColor: "bg-gradient-to-br from-red-500 to-orange-500",
 }
@@ -85,8 +85,8 @@ export function HeroSlider() {
       <div className="container mx-auto px-2 py-1 md:px-4 md:py-4">
         <div className="flex flex-col gap-2 md:gap-4 lg:flex-row">
           {/* Main Slider - 3/4 on desktop, full width on mobile */}
-          <div className="relative w-full lg:flex-[3]">
-            <div className="relative aspect-[16/9] overflow-hidden rounded-lg md:aspect-[2/1] md:rounded-xl lg:aspect-[2.2/1]">
+          <div className="relative w-full lg:flex-3">
+            <div className="relative aspect-video overflow-hidden rounded-lg md:aspect-video md:rounded-xl lg:aspect-[2.2/1]">
               {sliderItems.map((item, index) => (
                 <div
                   key={item.id}
@@ -101,7 +101,7 @@ export function HeroSlider() {
                 >
                   <div
                     className={cn(
-                      "absolute inset-0 bg-gradient-to-r",
+                      "absolute inset-0 bg-linear-to-r",
                       item.bgColor
                     )}
                   />
@@ -181,7 +181,7 @@ export function HeroSlider() {
           </div>
 
           {/* Special Offer Poster - 1/4 on desktop, hidden on mobile/tablet */}
-          <div className="hidden lg:flex lg:flex-[1]">
+          <div className="hidden lg:flex lg:flex-1">
             <Link
               href={specialOffer.href}
               className="group relative block w-full overflow-hidden rounded-xl"

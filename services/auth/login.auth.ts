@@ -15,13 +15,15 @@ export const login = async (payload: LoginRequest) => {
     // ✅ store token
     await setCookie("accessToken", data?.data?.accessToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
       path: "/",
     })
 
     await setCookie("refreshToken", data?.data?.refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
       path: "/",
     })
 

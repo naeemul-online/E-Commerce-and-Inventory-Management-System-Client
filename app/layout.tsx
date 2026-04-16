@@ -34,13 +34,10 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
-
 export const metadata: Metadata = {
-  title: "ShopHub - Your One-Stop eCommerce Destination",
+  title: "Nafiya Mart - Your One-Stop eCommerce Destination",
   description:
-    "Discover amazing products at ShopHub. Shop clothing, footwear, accessories, and more.",
+    "Discover amazing products at Nafiya Mart. Shop clothing, footwear, accessories, and more.",
   generator: "v0.app",
   icons: {
     icon: [

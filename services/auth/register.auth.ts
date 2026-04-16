@@ -15,8 +15,15 @@ export const registerUser = async (payload: RegisterRequest) => {
     // ✅ store token
     await setCookie("accessToken", data.data?.accessToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production" ? true : false,
       path: "/",
+      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+    })
+    await setCookie("refreshToken", data.data?.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      path: "/",
+      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
     })
 
     return data

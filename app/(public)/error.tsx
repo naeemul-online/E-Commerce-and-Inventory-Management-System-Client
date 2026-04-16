@@ -23,7 +23,8 @@ export class GracefullyDegradingErrorBoundary extends Component<
     this.contentRef = React.createRef()
   }
 
-  static getDerivedStateFromError(_: Error): ErrorBoundaryState {
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    void error
     return { hasError: true }
   }
 

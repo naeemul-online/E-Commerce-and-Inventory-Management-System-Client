@@ -19,7 +19,7 @@ import {
 import { registerUser } from "@/services/auth/register.auth"
 import Link from "next/link"
 
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { toast } from "sonner"
 import {
   Field,
@@ -30,6 +30,11 @@ import {
 import PasswordField from "./PasswordField"
 import PhoneInputField from "./PhoneInputField"
 import TextField from "./TextField"
+import {
+  getDefaultDashboardRoute,
+  isValidRedirectForRole,
+  UserRole,
+} from "@/lib/auth-utils"
 
 export default function SignupForm({
   className,
@@ -37,6 +42,8 @@ export default function SignupForm({
 }: React.ComponentProps<"div">) {
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectParam = searchParams.get("redirect")
   const form = useForm<RegisterInput, unknown, RegisterOutput>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -57,23 +64,27 @@ export default function SignupForm({
 
     const result = await registerUser(payload)
 
-    console.log(result)
-
     if (!result.success) {
       toast.error(result.message || "Registration failed. Please try again.")
-    } else if (result.data?.user.role === "ADMIN") {
-      router.push("/admin/dashboard")
-      toast.success(
-        "Registration successful! Welcome, " + result.user?.fullName
-      )
-      form.reset()
-    } else if (result.data?.user.role === "USER") {
-      router.push("/user/dashboard")
-      toast.success(
-        "Registration successful! Welcome, " + result.user?.fullName
-      )
-      form.reset()
+      return
     }
+
+    const role = result.data?.user?.role as UserRole | undefined
+    if (!role) {
+      toast.error("Registration succeeded but user role is missing.")
+      return
+    }
+
+    const destination =
+      redirectParam && isValidRedirectForRole(redirectParam, role)
+        ? redirectParam
+        : getDefaultDashboardRoute(role)
+
+    router.replace(destination)
+    toast.success(
+      "Registration successful! Welcome, " + (result.data?.user?.fullName || "")
+    )
+    form.reset()
   }
 
   return (

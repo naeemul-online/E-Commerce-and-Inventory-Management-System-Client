@@ -8,9 +8,9 @@ const CommonDashboardLayout = async ({
   children: React.ReactNode
 }) => {
   return (
-    <div className="mx-auto flex h-screen w-full max-w-7xl overflow-hidden">
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <main className="flex-1 overflow-y-auto bg-muted/10 p-4 md:p-6">
+    <div className="mx-auto flex w-full max-w-7xl">
+      <div className="flex flex-1 flex-col">
+        <main className="bg-muted/10 p-4 md:p-6">
           <div className="">{children}</div>
         </main>
       </div>

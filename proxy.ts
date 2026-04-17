@@ -140,7 +140,7 @@ export async function proxy(request: NextRequest) {
   // Protected routes – unauthenticated
   if (!accessToken) {
     const loginUrl = new URL("/login", request.url)
-    loginUrl.searchParams.set("redirect", pathname)
+    loginUrl.searchParams.set("redirect", `${pathname}${request.nextUrl.search}`)
     return NextResponse.redirect(loginUrl)
   }
 
@@ -163,13 +163,13 @@ export async function proxy(request: NextRequest) {
     )
   }
 
-  console.log(refreshedTokens)
-
   return withRefreshedTokens(NextResponse.next(), refreshedTokens)
 }
 
 export const config = {
   matcher: [
+    "/login",
+    "/register",
     "/admin/:path*",
     "/super-admin/:path*",
     "/user/:path*",

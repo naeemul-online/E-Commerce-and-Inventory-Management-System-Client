@@ -5,8 +5,13 @@ import {
   Source_Sans_3,
 } from "next/font/google"
 
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/modules/layout/theme-provider"
 import { cn } from "@/lib/utils"
+
+import { Navbar } from "@/components/navigation"
+import { Toaster } from "@/components/ui/sonner"
+import { CartProvider } from "@/contexts/cart-context"
+import { Metadata, Viewport } from "next"
 import "./globals.css"
 
 const sourceSans3Heading = Source_Sans_3({
@@ -29,6 +34,37 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
+export const metadata: Metadata = {
+  title: "Nafiya Mart - Your One-Stop eCommerce Destination",
+  description:
+    "Discover amazing products at Nafiya Mart. Shop clothing, footwear, accessories, and more.",
+  generator: "v0.app",
+  icons: {
+    icon: [
+      {
+        url: "/icon-light-32x32.png",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/icon-dark-32x32.png",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/icon.svg",
+        type: "image/svg+xml",
+      },
+    ],
+    apple: "/apple-icon.png",
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: "#FF8033",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -48,7 +84,13 @@ export default function RootLayout({
       )}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <CartProvider>
+            <Navbar />
+            {children}
+          </CartProvider>
+        </ThemeProvider>
+        <Toaster richColors position="bottom-right" />
       </body>
     </html>
   )

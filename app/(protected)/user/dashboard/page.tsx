@@ -95,13 +95,13 @@ const Page = () => {
       </section>
 
       <section className="animate-in fade-in-0 slide-in-from-bottom-2 overflow-hidden rounded-lg border bg-white duration-500">
-        <div className="flex items-center justify-between bg-zinc-900 px-4 py-3 sm:px-5">
-          <h2 className="text-base font-semibold text-white sm:text-lg">
+        <div className="flex items-center justify-between bg-primary px-4 py-3 sm:px-5">
+          <h2 className="text-base font-semibold text-background sm:text-lg">
             Recent orders
           </h2>
           <Button
             variant="outline"
-            className="h-8 rounded-md border-white/80 transition-colors duration-200 hover:border-white hover:bg-white/10"
+            className="h-8 rounded-md border-background/80 bg-transparent text-background transition-colors duration-200 hover:border-background hover:bg-background/10 hover:text-background"
           >
             All orders
           </Button>
@@ -112,13 +112,13 @@ const Page = () => {
       </section>
 
       <section className="animate-in fade-in-0 slide-in-from-bottom-2 overflow-hidden rounded-lg border bg-white duration-500">
-        <div className="flex items-center justify-between bg-zinc-900 px-4 py-3 sm:px-5">
-          <h2 className="text-base font-semibold text-white sm:text-lg">
+        <div className="flex items-center justify-between bg-primary px-4 py-3 sm:px-5">
+          <h2 className="text-base font-semibold text-background sm:text-lg">
             Wishlist items
           </h2>
           <Button
             variant="outline"
-            className="h-8 rounded-md border-white/80 transition-colors duration-200 hover:border-white hover:bg-white/10"
+            className="h-8 rounded-md border-background/80 bg-transparent text-background transition-colors duration-200 hover:border-background hover:bg-background/10 hover:text-background"
           >
             View more
           </Button>

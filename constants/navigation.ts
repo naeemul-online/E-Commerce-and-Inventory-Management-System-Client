@@ -27,7 +27,7 @@ export interface CategoryLink extends NavLink {
 // Desktop navigation actions
 export const desktopNavActions: NavLink[] = [
   { label: "Track Order", href: "/track", icon: Package },
-  { label: "Sign In", href: "/login", icon: LogIn },
+  { label: "My Account", href: "/login", icon: LogIn },
   { label: "Wishlist", href: "/wishlist", icon: Heart },
 ]
 

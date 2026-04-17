@@ -3,7 +3,7 @@ import { UserRole } from "@/lib/auth-utils"
 export type RoleNavItem = {
   href: string
   label: string
-  match: (string | RegExp)[]
+  match: string[]
   badgeKey?: string
   icon?: string
 }
@@ -94,20 +94,48 @@ const baseNavByRole: Record<UserRole, RoleNavSection[]> = {
       ],
     },
     {
-      title: "Inventory",
+      title: "Management",
       items: [
         {
-          href: "/admin/inventory",
-          label: "Inventory List",
-          match: ["/admin/inventory", /^\/admin\/inventory\/products\/[^/]+$/],
-          icon: "PackageSearch",
+          href: "/admin/dashboard/products",
+          label: "Products",
+          match: ["re:^/admin/dashboard/products(/.*)?$"],
+          icon: "Package",
         },
         {
-          href: "/admin/inventory/stock-adjustments",
-          label: "Stock Adjustments",
-          match: ["/admin/inventory/stock-adjustments"],
-          badgeKey: "stockAdjustments",
-          icon: "ClipboardPlus",
+          href: "/admin/dashboard/inventory",
+          label: "Inventory",
+          match: ["re:^/admin/dashboard/inventory(/.*)?$"],
+          icon: "Boxes",
+        },
+        {
+          href: "/admin/dashboard/orders",
+          label: "Orders",
+          match: ["re:^/admin/dashboard/orders(/.*)?$"],
+          icon: "ShoppingCart",
+        },
+        {
+          href: "/admin/dashboard/users",
+          label: "Users",
+          match: ["re:^/admin/dashboard/users(/.*)?$"],
+          icon: "UsersRound",
+        },
+        {
+          href: "/admin/dashboard/delivery",
+          label: "Delivery",
+          match: ["re:^/admin/dashboard/delivery(/.*)?$"],
+          icon: "Truck",
+        },
+      ],
+    },
+    {
+      title: "Account",
+      items: [
+        {
+          href: "/admin/dashboard/profile",
+          label: "Admin Profile",
+          match: ["re:^/admin/dashboard/profile(/.*)?$"],
+          icon: "UserCog",
         },
       ],
     },

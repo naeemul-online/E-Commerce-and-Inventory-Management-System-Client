@@ -14,10 +14,18 @@ import {
   type MenuBarCategory,
 } from "@/constants/navigation"
 import { cn } from "@/lib/utils"
-import { ChevronDown, ChevronRight, LogInIcon } from "lucide-react"
+import { getAuthUserInfo } from "@/services/auth/get-user-info.auth"
+import { logoutUser } from "@/services/auth/logout.auth"
+import {
+  ChevronDown,
+  ChevronRight,
+  CircleUserRound,
+  LogInIcon,
+} from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
-import { Button } from "../ui/button"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
 
 interface MenuDrawerProps {
   isOpen: boolean
@@ -99,6 +107,68 @@ function CategoryAccordion({
 }
 
 export function MenuDrawer({ isOpen, onClose }: MenuDrawerProps) {
+  const router = useRouter()
+  const [userName, setUserName] = useState<string | null>(null)
+  const [isLoadingUser, setIsLoadingUser] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  useEffect(() => {
+    const loadUser = async () => {
+      setIsLoadingUser(true)
+      const user = await getAuthUserInfo()
+      setUserName(user?.fullName || null)
+      setIsLoadingUser(false)
+    }
+
+    if (isOpen) {
+      loadUser()
+    }
+  }, [isOpen])
+
+  const handleLogoutConfirm = () => {
+    if (isLoggingOut) return
+
+    toast("Confirm logout", {
+      description: "Are you sure you want to logout from your account?",
+      duration: 10000,
+      cancel: {
+        label: "Cancel",
+        onClick: () => {},
+      },
+      action: {
+        label: "Logout",
+        onClick: async () => {
+          setIsLoggingOut(true)
+          const loadingToast = toast.loading("Logging out...")
+
+          try {
+            const result = await logoutUser()
+            if (!result?.success) {
+              toast.error(result?.message || "Failed to logout.", {
+                id: loadingToast,
+              })
+              return
+            }
+
+            toast.success(result.message || "Logged out successfully.", {
+              id: loadingToast,
+            })
+            setUserName(null)
+            onClose()
+            router.replace("/?loggedOut=true")
+            router.refresh()
+          } catch {
+            toast.error("Failed to logout. Please try again.", {
+              id: loadingToast,
+            })
+          } finally {
+            setIsLoggingOut(false)
+          }
+        },
+      },
+    })
+  }
+
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent
@@ -106,14 +176,50 @@ export function MenuDrawer({ isOpen, onClose }: MenuDrawerProps) {
         className="flex w-full flex-col p-0 sm:max-w-sm"
       >
         <SheetHeader className="p-4 pb-0">
-          <SheetTitle className="text-left">Hello there!</SheetTitle>
+          <SheetTitle className="sr-only">Menu</SheetTitle>
+          <div className="rounded-xl bg-[#f6891f] p-3 text-white shadow-sm">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#d9d9d9] text-zinc-500">
+                <CircleUserRound className="h-7 w-7" />
+              </div>
 
-          <Link href="/login">
-            <Button variant="outline">
-              <LogInIcon className="h-4 w-4" />
-              Signin
-            </Button>
-          </Link>
+              <div className="min-w-0 flex-1 text-left">
+                {isLoadingUser ? (
+                  <p className="mt-1 text-sm leading-tight font-medium text-white/90">
+                    Checking...
+                  </p>
+                ) : userName ? (
+                  <div className="mt-1">
+                    <p className="truncate text-sm leading-tight font-medium text-white">
+                      {userName}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleLogoutConfirm}
+                      disabled={isLoggingOut}
+                      className="mt-1 text-[11px] leading-none font-medium text-white/85 underline-offset-2 hover:underline disabled:opacity-60"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-base leading-tight font-semibold">
+                      Hello there!
+                    </p>
+                    <Link
+                      href="/login"
+                      onClick={onClose}
+                      className="mt-1 inline-flex items-center gap-1 text-sm leading-tight font-medium text-white"
+                    >
+                      <LogInIcon className="h-4 w-4" />
+                      Sign in
+                    </Link>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
         </SheetHeader>
 
         <ScrollArea className="flex-1">

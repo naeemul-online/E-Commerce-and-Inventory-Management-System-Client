@@ -1,7 +1,11 @@
 import React from "react"
 
-const AdminDashboardLayout = ({ children }: { children: React.ReactNode }) => {
-  return <div>{children}</div>
+const AdminDashboardLayout = ({
+  children,
+}: {
+  children: React.ReactNode
+}) => {
+  return <>{children}</>
 }
 
 export default AdminDashboardLayout

@@ -7,15 +7,7 @@ const CommonDashboardLayout = async ({
 }: {
   children: React.ReactNode
 }) => {
-  return (
-    <div className="mx-auto flex w-full max-w-7xl">
-      <div className="flex flex-1 flex-col">
-        <main className="bg-muted/10 p-4 md:p-6">
-          <div className="">{children}</div>
-        </main>
-      </div>
-    </div>
-  )
+  return <div className="min-h-screen w-full bg-muted/10">{children}</div>
 }
 
 export default CommonDashboardLayout

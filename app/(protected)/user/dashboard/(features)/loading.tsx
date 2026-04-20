@@ -1,7 +1,7 @@
-import FeatureLoadingSkeleton from "@/app/(protected)/user/dashboard/_components/feature-loading-skeleton"
+import PageLoadingSpinner from "@/components/ui/page-loading-spinner"
 
 const UserFeatureLoading = () => {
-  return <FeatureLoadingSkeleton />
+  return <PageLoadingSpinner />
 }
 
 export default UserFeatureLoading

@@ -56,7 +56,7 @@ const stats = [
 const Page = () => {
   return (
     <div className="space-y-5 md:space-y-6">
-      <section className="animate-in fade-in-0 slide-in-from-top-2 rounded-2xl bg-linear-to-r from-cyan-400 via-indigo-500 to-fuchsia-500 p-5 text-white duration-500 md:p-7">
+      <section className="animate-in fade-in-0 slide-in-from-top-2 rounded-2xl bg-linear-to-r from-cyan-400 via-indigo-500 to-fuchsia-500 p-6 text-white duration-500 md:p-8">
         <h1 className="text-xl font-semibold md:text-2xl">My Dashboard</h1>
         <p className="mt-1 text-sm text-white/90">
           Track your orders, wishlist, payments, and account updates in one
@@ -94,7 +94,7 @@ const Page = () => {
         })}
       </section>
 
-      <section className="animate-in fade-in-0 slide-in-from-bottom-2 overflow-hidden rounded-lg border bg-white duration-500">
+      <section className="animate-in fade-in-0 slide-in-from-bottom-2 overflow-hidden rounded-lg border bg-card duration-500">
         <div className="flex items-center justify-between bg-primary px-4 py-3 sm:px-5">
           <h2 className="text-base font-semibold text-background sm:text-lg">
             Recent orders
@@ -106,12 +106,12 @@ const Page = () => {
             All orders
           </Button>
         </div>
-        <div className="px-4 py-8 text-center text-zinc-500 sm:px-5">
+        <div className="px-4 py-6 text-center text-muted-foreground sm:px-5">
           No Order Found
         </div>
       </section>
 
-      <section className="animate-in fade-in-0 slide-in-from-bottom-2 overflow-hidden rounded-lg border bg-white duration-500">
+      <section className="animate-in fade-in-0 slide-in-from-bottom-2 overflow-hidden rounded-lg border bg-card duration-500">
         <div className="flex items-center justify-between bg-primary px-4 py-3 sm:px-5">
           <h2 className="text-base font-semibold text-background sm:text-lg">
             Wishlist items
@@ -123,7 +123,7 @@ const Page = () => {
             View more
           </Button>
         </div>
-        <div className="px-4 py-8 text-center text-zinc-500 sm:px-5">
+        <div className="px-4 py-6 text-center text-muted-foreground sm:px-5">
           No Product in Wishlist
         </div>
       </section>

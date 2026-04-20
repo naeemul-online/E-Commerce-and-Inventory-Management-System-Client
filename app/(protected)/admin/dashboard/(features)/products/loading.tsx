@@ -1,7 +1,7 @@
 import PageLoadingSpinner from "@/components/ui/page-loading-spinner"
 
-const AdminDashboardLoading = () => {
+const ProductsPageLoading = () => {
   return <PageLoadingSpinner />
 }
 
-export default AdminDashboardLoading
+export default ProductsPageLoading

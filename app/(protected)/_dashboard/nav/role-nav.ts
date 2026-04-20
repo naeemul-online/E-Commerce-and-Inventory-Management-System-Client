@@ -103,6 +103,18 @@ const baseNavByRole: Record<UserRole, RoleNavSection[]> = {
           icon: "Package",
         },
         {
+          href: "/admin/dashboard/categories",
+          label: "Categories",
+          match: ["re:^/admin/dashboard/categories(/.*)?$"],
+          icon: "Tags",
+        },
+        {
+          href: "/admin/dashboard/brands",
+          label: "Brands",
+          match: ["re:^/admin/dashboard/brands(/.*)?$"],
+          icon: "BadgeCheck",
+        },
+        {
           href: "/admin/dashboard/inventory",
           label: "Inventory",
           match: ["re:^/admin/dashboard/inventory(/.*)?$"],

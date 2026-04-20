@@ -15,28 +15,28 @@ const metrics = [
     value: 0,
     icon: ShoppingCart,
     iconBg: "bg-blue-500/15 text-blue-600",
-    cardBg: "bg-blue-50",
+    cardBg: "bg-card",
   },
   {
     title: "Low Stock SKUs",
     value: 0,
     icon: Boxes,
     iconBg: "bg-amber-500/15 text-amber-600",
-    cardBg: "bg-amber-50",
+    cardBg: "bg-card",
   },
   {
     title: "Pending Deliveries",
     value: 0,
     icon: Truck,
     iconBg: "bg-cyan-500/15 text-cyan-600",
-    cardBg: "bg-cyan-50",
+    cardBg: "bg-card",
   },
   {
     title: "Active Users",
     value: 0,
     icon: UsersRound,
     iconBg: "bg-violet-500/15 text-violet-600",
-    cardBg: "bg-violet-50",
+    cardBg: "bg-card",
   },
 ]
 
@@ -59,7 +59,7 @@ const analyticsSeries = [
 const page = () => {
   return (
     <div className="space-y-5 md:space-y-6">
-      <section className="animate-in fade-in-0 slide-in-from-top-2 rounded-2xl bg-linear-to-r from-sky-500 via-indigo-500 to-violet-500 p-5 text-white duration-500 md:p-7">
+      <section className="animate-in fade-in-0 slide-in-from-top-2 rounded-2xl bg-linear-to-r from-sky-500 via-indigo-500 to-violet-500 p-6 text-white duration-500 md:p-8">
         <h1 className="text-xl font-semibold md:text-2xl">Admin Dashboard</h1>
         <p className="mt-1 text-sm text-white/90">
           Manage products, inventory, orders, deliveries, and users from one
@@ -81,10 +81,10 @@ const page = () => {
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-2xl leading-none font-bold text-zinc-900 sm:text-4xl">
+                  <p className="text-2xl leading-none font-bold text-card-foreground sm:text-4xl">
                     {metric.value}
                   </p>
-                  <p className="mt-2 max-w-[170px] text-xs font-medium text-zinc-700 sm:text-base">
+                  <p className="mt-2 max-w-[170px] text-xs font-medium text-muted-foreground sm:text-base">
                     {metric.title}
                   </p>
                 </div>
@@ -97,15 +97,15 @@ const page = () => {
         })}
       </section>
 
-      <section className="animate-in fade-in-0 slide-in-from-bottom-2 overflow-hidden rounded-lg border bg-white duration-500">
+      <section className="animate-in fade-in-0 slide-in-from-bottom-2 overflow-hidden rounded-lg border bg-card duration-500">
         <div className="flex items-center justify-between bg-primary px-4 py-3 sm:px-5">
           <h2 className="flex items-center gap-2 text-base font-semibold text-background sm:text-lg">
             <ChartColumnIncreasing className="size-4 sm:size-5" />
             Admin analytics
           </h2>
         </div>
-        <div className="px-4 py-5 sm:px-5">
-          <p className="text-sm text-zinc-600">
+        <div className="px-4 py-6 sm:px-5">
+          <p className="text-sm text-muted-foreground">
             Owner-level performance snapshot for revenue and orders. Keep this
             section on dashboard for faster daily decision making.
           </p>

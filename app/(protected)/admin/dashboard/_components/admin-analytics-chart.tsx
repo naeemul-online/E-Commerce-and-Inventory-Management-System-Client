@@ -48,13 +48,15 @@ const AdminAnalyticsChart = ({ series }: AdminAnalyticsChartProps) => {
                   aria-label={`${item.month} orders`}
                 />
               </div>
-              <p className="text-xs font-medium text-zinc-600">{item.month}</p>
+              <p className="text-xs font-medium text-muted-foreground">
+                {item.month}
+              </p>
             </div>
           )
         })}
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-600">
+      <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
         <div className="flex items-center gap-2">
           <span className="inline-block size-2.5 rounded-sm bg-primary/85" />
           Sales (USD)

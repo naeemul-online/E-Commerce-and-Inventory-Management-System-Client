@@ -7,7 +7,7 @@ const CommonDashboardLayout = async ({
 }: {
   children: React.ReactNode
 }) => {
-  return <div className="min-h-screen w-full bg-muted/10">{children}</div>
+  return <div className="h-screen w-full overflow-hidden bg-muted/10">{children}</div>
 }
 
 export default CommonDashboardLayout

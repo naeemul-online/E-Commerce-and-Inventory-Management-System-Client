@@ -13,9 +13,11 @@ const DashboardShell = ({ role, children }: DashboardShellProps) => {
   const sections = getRoleNav(role)
 
   return (
-    <div className="flex min-h-screen w-full bg-muted/10">
+    <div className="flex h-screen w-full overflow-hidden bg-muted/10">
       <SidebarDashboard sections={sections} />
-      <main className="min-w-0 flex-1 p-4 md:p-6">{children}</main>
+      <main className="min-w-0 flex-1 overflow-y-auto p-4 md:p-6">
+        {children}
+      </main>
       <MobileDashboardNav sections={sections} />
     </div>
   )

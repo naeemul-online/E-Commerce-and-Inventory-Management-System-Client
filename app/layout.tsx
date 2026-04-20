@@ -8,7 +8,6 @@ import {
 import { ThemeProvider } from "@/components/modules/layout/theme-provider"
 import { cn } from "@/lib/utils"
 
-import { Navbar } from "@/components/navigation"
 import { Toaster } from "@/components/ui/sonner"
 import { CartProvider } from "@/contexts/cart-context"
 import { Metadata, Viewport } from "next"
@@ -85,10 +84,7 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider>
-          <CartProvider>
-            <Navbar />
-            {children}
-          </CartProvider>
+          <CartProvider>{children}</CartProvider>
         </ThemeProvider>
         <Toaster richColors position="bottom-right" />
       </body>

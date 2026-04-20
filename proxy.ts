@@ -89,6 +89,14 @@ const refreshAccessToken = async (
 }
 
 export async function proxy(request: NextRequest) {
+  // ----------------------------------------------------------------------
+  // DEV ONLY: Auth bypass for UI development.
+  // Uncomment the block below (and remove this early return) to re-enable
+  // the protected route / role-based auth logic after development.
+  // ----------------------------------------------------------------------
+  return NextResponse.next()
+
+  /*
   const { pathname } = request.nextUrl
 
   let accessToken = request.cookies.get("accessToken")?.value || null
@@ -164,6 +172,7 @@ export async function proxy(request: NextRequest) {
   }
 
   return withRefreshedTokens(NextResponse.next(), refreshedTokens)
+  */
 }
 
 export const config = {

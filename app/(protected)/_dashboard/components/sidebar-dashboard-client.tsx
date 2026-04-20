@@ -73,38 +73,43 @@ const SidebarDashboardClient = ({ sections }: SidebarDashboardClientProps) => {
   }
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-[250px] flex-col border-r border-sidebar-border bg-sidebar px-3 py-4 text-sidebar-foreground lg:flex">
-      <nav className="flex-1 space-y-1.5 overflow-y-auto">
-        {sections
-          .flatMap((section) => section.items)
-          .map((item) => {
-            const active = isItemActive(pathname, item.match)
-            const Icon = getIconComponent(item.icon ?? "Circle")
-            return (
-              <Link key={item.href} href={item.href}>
-                <Button
-                  variant="ghost"
-                  className={cn(
-                    "h-11 w-full justify-start rounded-lg px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground",
-                    active &&
-                      "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
-                  )}
-                >
-                  <Icon className="mr-2 size-4" />
-                  <span className="flex-1 text-left">{item.label}</span>
-                  {active ? <ChevronRight className="size-4" /> : null}
-                </Button>
-              </Link>
-            )
-          })}
+    <aside className="sticky top-0 hidden h-screen w-[250px] shrink-0 flex-col overflow-hidden border-r border-sidebar-border bg-sidebar px-3 py-3 text-sidebar-foreground lg:flex">
+      <nav className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pr-1">
+        {sections.map((section) => (
+          <div key={section.title} className="flex flex-col gap-1">
+            <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+              {section.title}
+            </p>
+            {section.items.map((item) => {
+              const active = isItemActive(pathname, item.match)
+              const Icon = getIconComponent(item.icon ?? "Circle")
+              return (
+                <Link key={item.href} href={item.href}>
+                  <Button
+                    variant="ghost"
+                    className={cn(
+                      "h-9 w-full justify-start rounded-lg px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground",
+                      active &&
+                        "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
+                    )}
+                  >
+                    <Icon className="mr-2 size-4" />
+                    <span className="flex-1 text-left">{item.label}</span>
+                    {active ? <ChevronRight className="size-4" /> : null}
+                  </Button>
+                </Link>
+              )
+            })}
+          </div>
+        ))}
       </nav>
 
-      <div className="pt-4">
+      <div className="mt-3 shrink-0 border-t border-sidebar-border pt-3">
         <Button
           variant="ghost"
           onClick={handleLogoutConfirm}
           disabled={isLoggingOut}
-          className="h-11 w-full justify-start rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+          className="h-10 w-full justify-start rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
         >
           <LogOut className="mr-2 size-4" />
           Logout

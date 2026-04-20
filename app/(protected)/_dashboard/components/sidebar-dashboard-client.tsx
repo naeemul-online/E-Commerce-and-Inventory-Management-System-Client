@@ -73,8 +73,8 @@ const SidebarDashboardClient = ({ sections }: SidebarDashboardClientProps) => {
   }
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-[250px] flex-col border-r border-sidebar-border bg-sidebar px-3 py-4 text-sidebar-foreground lg:flex">
-      <nav className="flex-1 space-y-1.5 overflow-y-auto">
+    <aside className="sticky top-0 hidden h-screen w-[250px] shrink-0 flex-col border-r border-sidebar-border bg-sidebar px-3 py-4 text-sidebar-foreground lg:flex">
+      <nav className="min-h-0 flex-1 space-y-1.5 overflow-y-auto pr-1">
         {sections
           .flatMap((section) => section.items)
           .map((item) => {
@@ -99,7 +99,7 @@ const SidebarDashboardClient = ({ sections }: SidebarDashboardClientProps) => {
           })}
       </nav>
 
-      <div className="pt-4">
+      <div className="shrink-0 border-t border-sidebar-border pt-3 mt-3">
         <Button
           variant="ghost"
           onClick={handleLogoutConfirm}

@@ -13,7 +13,7 @@ import {
 import { getIconComponent } from "@/lib/icon-mapper"
 import { cn } from "@/lib/utils"
 import { logoutUser } from "@/services/auth/logout.auth"
-import { ChevronRight, LogOut, PanelLeftOpen } from "lucide-react"
+import { ChevronRight, LogOut, Menu, PanelLeftOpen } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -21,6 +21,12 @@ import { toast } from "sonner"
 
 type MobileDashboardNavProps = {
   sections: RoleNavSection[]
+  /**
+   * Visual style for the trigger on mobile.
+   * - "floating": the right-edge pill button (default, used by the user storefront dashboard).
+   * - "hamburger": a top-left hamburger icon button (used by admin / super-admin dashboards).
+   */
+  variant?: "floating" | "hamburger"
 }
 
 const isItemActive = (pathname: string, matchers: string[]) => {
@@ -33,7 +39,10 @@ const isItemActive = (pathname: string, matchers: string[]) => {
   })
 }
 
-const MobileDashboardNav = ({ sections }: MobileDashboardNavProps) => {
+const MobileDashboardNav = ({
+  sections,
+  variant = "floating",
+}: MobileDashboardNavProps) => {
   const pathname = usePathname()
   const router = useRouter()
   const [open, setOpen] = useState(false)
@@ -86,16 +95,35 @@ const MobileDashboardNav = ({ sections }: MobileDashboardNavProps) => {
     })
   }
 
+  const isHamburger = variant === "hamburger"
+
   return (
-    <div className="fixed top-1/2 right-0 z-45 -translate-y-[calc(50%+90px)] lg:hidden">
+    <div
+      className={cn(
+        "fixed z-45 lg:hidden",
+        isHamburger
+          ? "top-3 left-3"
+          : "top-1/2 right-0 -translate-y-[calc(50%+90px)]"
+      )}
+    >
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button
-            size="icon-lg"
-            className="rounded-l-xl rounded-r-none bg-primary text-primary-foreground shadow-lg transition-all duration-200 hover:scale-105 hover:bg-primary/90"
+            size={isHamburger ? "icon" : "icon-lg"}
+            variant={isHamburger ? "outline" : "default"}
+            className={cn(
+              "shadow-lg transition-all duration-200",
+              isHamburger
+                ? "size-10 rounded-lg border-border bg-background text-foreground hover:bg-muted"
+                : "rounded-l-xl rounded-r-none bg-primary text-primary-foreground hover:scale-105 hover:bg-primary/90"
+            )}
             aria-label="Open dashboard navigation"
           >
-            <PanelLeftOpen className="size-5" />
+            {isHamburger ? (
+              <Menu className="size-5" />
+            ) : (
+              <PanelLeftOpen className="size-5" />
+            )}
           </Button>
         </SheetTrigger>
         <SheetContent

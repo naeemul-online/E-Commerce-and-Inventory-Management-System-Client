@@ -16,6 +16,18 @@ export type RoleNavSection = {
 const baseNavByRole: Record<UserRole, RoleNavSection[]> = {
   USER: [
     {
+      title: "Shop",
+      items: [
+        {
+          href: "/",
+          label: "Home",
+          // Dashboard is never rendered at "/", so this item will never be marked active.
+          match: [],
+          icon: "Home",
+        },
+      ],
+    },
+    {
       title: "Overview",
       items: [
         {
@@ -82,6 +94,17 @@ const baseNavByRole: Record<UserRole, RoleNavSection[]> = {
     },
   ],
   ADMIN: [
+    {
+      title: "Storefront",
+      items: [
+        {
+          href: "/",
+          label: "Home",
+          match: [],
+          icon: "Home",
+        },
+      ],
+    },
     {
       title: "Overview",
       items: [
@@ -153,6 +176,17 @@ const baseNavByRole: Record<UserRole, RoleNavSection[]> = {
     },
   ],
   SUPER_ADMIN: [
+    {
+      title: "Storefront",
+      items: [
+        {
+          href: "/",
+          label: "Home",
+          match: [],
+          icon: "Home",
+        },
+      ],
+    },
     {
       title: "Overview",
       items: [

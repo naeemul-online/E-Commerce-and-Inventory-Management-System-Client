@@ -2,14 +2,10 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
+import { Minus, Plus } from "lucide-react"
 import { useState } from "react"
-import {
-  HONEY_BRANDS,
-  HONEY_CATEGORIES,
-  HONEY_FLAGS,
-} from "./data"
+import { HONEY_BRANDS, HONEY_CATEGORIES, HONEY_FLAGS } from "./data"
 
 type CheckboxRowProps = {
   id: string
@@ -39,18 +35,49 @@ function CheckboxRow({ id, label, checked, onCheckedChange }: CheckboxRowProps) 
   )
 }
 
-type SectionProps = {
+type FilterCardProps = {
   title: string
   children: React.ReactNode
+  defaultOpen?: boolean
 }
 
-function Section({ title, children }: SectionProps) {
+function FilterCard({ title, children, defaultOpen = true }: FilterCardProps) {
+  const [open, setOpen] = useState(defaultOpen)
+  const contentId = `filter-card-${title.toLowerCase().replace(/\s+/g, "-")}`
+
   return (
-    <div className="border-b border-border pb-5">
-      <h3 className="mb-3 text-sm font-semibold tracking-wide text-foreground uppercase">
-        {title}
-      </h3>
-      <div className="flex flex-col">{children}</div>
+    <div className="overflow-hidden rounded-lg border border-border bg-card">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls={contentId}
+        className={cn(
+          "flex w-full items-start justify-between gap-3 px-5 pt-5 pb-3 text-left",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        )}
+      >
+        <div className="flex flex-col items-start gap-1.5">
+          <h3 className="text-sm font-bold tracking-tight text-foreground">
+            {title}
+          </h3>
+          <span
+            aria-hidden="true"
+            className="h-[3px] w-10 rounded-full bg-primary"
+          />
+        </div>
+        {open ? (
+          <Minus className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+        ) : (
+          <Plus className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+        )}
+        <span className="sr-only">{open ? "Collapse" : "Expand"} {title}</span>
+      </button>
+      {open ? (
+        <div id={contentId} className="px-5 pt-1 pb-5">
+          {children}
+        </div>
+      ) : null}
     </div>
   )
 }
@@ -74,14 +101,11 @@ export function HoneyFilterSidebar({ className }: { className?: string }) {
 
   return (
     <aside
-      className={cn(
-        "w-full shrink-0 rounded-lg border border-border bg-card p-5",
-        className
-      )}
+      className={cn("w-full shrink-0 flex-col gap-4", className)}
       aria-label="Honey filters"
     >
-      <div className="flex flex-col gap-5">
-        <Section title="Filter By Category">
+      <FilterCard title="Filter By Category">
+        <div className="flex flex-col">
           {HONEY_CATEGORIES.map((cat) => (
             <CheckboxRow
               key={cat}
@@ -93,53 +117,44 @@ export function HoneyFilterSidebar({ className }: { className?: string }) {
               }
             />
           ))}
-        </Section>
+        </div>
+      </FilterCard>
 
-        <Section title="Price">
-          <div className="flex items-end gap-2">
-            <div className="flex-1">
-              <Label
-                htmlFor="honey-price-min"
-                className="mb-1 block text-xs text-muted-foreground"
-              >
-                Min
-              </Label>
-              <Input
-                id="honey-price-min"
-                type="number"
-                inputMode="numeric"
-                placeholder="0"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-                className="h-9"
-                min={0}
-              />
-            </div>
-            <div className="flex-1">
-              <Label
-                htmlFor="honey-price-max"
-                className="mb-1 block text-xs text-muted-foreground"
-              >
-                Max
-              </Label>
-              <Input
-                id="honey-price-max"
-                type="number"
-                inputMode="numeric"
-                placeholder="0"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-                className="h-9"
-                min={0}
-              />
-            </div>
-            <Button type="button" className="h-9">
-              Go
-            </Button>
-          </div>
-        </Section>
+      <FilterCard title="Price">
+        <div className="flex items-center gap-2">
+          <Input
+            id="honey-price-min"
+            type="number"
+            inputMode="numeric"
+            placeholder="min"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            className="h-9 flex-1"
+            min={0}
+            aria-label="Minimum price"
+          />
+          <span aria-hidden="true" className="text-muted-foreground">
+            -
+          </span>
+          <Input
+            id="honey-price-max"
+            type="number"
+            inputMode="numeric"
+            placeholder="max"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            className="h-9 flex-1"
+            min={0}
+            aria-label="Maximum price"
+          />
+          <Button type="button" className="h-9 px-4">
+            Go
+          </Button>
+        </div>
+      </FilterCard>
 
-        <Section title="Brands">
+      <FilterCard title="Brands">
+        <div className="flex flex-col">
           {HONEY_BRANDS.map((brand) => (
             <CheckboxRow
               key={brand}
@@ -151,27 +166,24 @@ export function HoneyFilterSidebar({ className }: { className?: string }) {
               }
             />
           ))}
-        </Section>
-
-        <div className="pb-1">
-          <h3 className="mb-3 text-sm font-semibold tracking-wide text-foreground uppercase">
-            Product Flag
-          </h3>
-          <div className="flex flex-col">
-            {HONEY_FLAGS.map((flag) => (
-              <CheckboxRow
-                key={flag}
-                id={`honey-flag-${flag}`}
-                label={flag}
-                checked={selectedFlags.includes(flag)}
-                onCheckedChange={() =>
-                  toggle(flag, selectedFlags, setSelectedFlags)
-                }
-              />
-            ))}
-          </div>
         </div>
-      </div>
+      </FilterCard>
+
+      <FilterCard title="Product Flag">
+        <div className="flex flex-col">
+          {HONEY_FLAGS.map((flag) => (
+            <CheckboxRow
+              key={flag}
+              id={`honey-flag-${flag}`}
+              label={flag}
+              checked={selectedFlags.includes(flag)}
+              onCheckedChange={() =>
+                toggle(flag, selectedFlags, setSelectedFlags)
+              }
+            />
+          ))}
+        </div>
+      </FilterCard>
     </aside>
   )
 }

@@ -14,27 +14,23 @@ export const metadata = {
 
 export default function HoneyCollectionPage() {
   return (
-    <main className="flex flex-col gap-6 py-6">
-      {/* Breadcrumbs */}
-      <HoneyBreadcrumbs />
-
-      {/* Header */}
-      <header className="flex flex-col gap-1">
+    <main className="flex flex-col gap-4 bg-muted/40 py-6 md:gap-5">
+      {/* Title + Breadcrumbs banner */}
+      <header className="flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
           Honey
         </h1>
-        <p className="text-sm text-muted-foreground">
-          Pure, raw, and organic honey sourced from trusted apiaries.
-        </p>
+        <HoneyBreadcrumbs />
       </header>
 
-      {/* Content grid */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
+      {/* Content grid — the first filter card in the sidebar aligns with the
+          controls bar in the main column thanks to implicit grid row placement. */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[260px_1fr] lg:gap-5">
         {/* Sidebar (desktop only) */}
-        <HoneyFilterSidebar className="hidden lg:block" />
+        <HoneyFilterSidebar className="hidden lg:flex" />
 
         {/* Main column */}
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-4 lg:gap-5">
           <HoneyControlsBar totalCount={honeyProducts.length} />
 
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">

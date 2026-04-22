@@ -24,7 +24,10 @@ function NativeSelect({
   return (
     <div className="flex items-center gap-2">
       {label ? (
-        <label htmlFor={id} className="text-sm text-muted-foreground">
+        <label
+          htmlFor={id}
+          className="hidden text-sm text-muted-foreground md:block"
+        >
           {label}
         </label>
       ) : null}
@@ -64,7 +67,10 @@ type CollectionControlsBarProps = {
   totalCount: number
 }
 
-export function CollectionControlsBar({ slug, totalCount: _totalCount }: CollectionControlsBarProps) {
+export function CollectionControlsBar({
+  slug,
+  totalCount: _totalCount,
+}: CollectionControlsBarProps) {
   const [sort, setSort] = useState("default")
   const [layout, setLayout] = useState("default")
 

@@ -1,0 +1,6 @@
+export { ProductCTA } from "./product-cta"
+export { ProductDescription } from "./product-description"
+export { ProductDetailsPage } from "./product-details-page"
+export { ProductImageGallery } from "./product-image-gallery"
+export { ProductReviews } from "./product-reviews"
+export { ProductTabs } from "./product-tabs"

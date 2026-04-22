@@ -1,9 +1,11 @@
-const Dates = () => {
-  return (
-    <div>
-      <h2>This is dates page</h2>
-    </div>
-  )
+import { CollectionPage } from "@/components/collections"
+import { datesConfig } from "@/lib/collections-data"
+
+export const metadata = {
+  title: "Dates — Premium Ajwa, Medjool & More",
+  description: datesConfig.description,
 }
 
-export default Dates
+export default function DatesCollectionPage() {
+  return <CollectionPage config={datesConfig} />
+}

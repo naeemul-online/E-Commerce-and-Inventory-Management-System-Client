@@ -2,6 +2,7 @@ import MobileDashboardNav from "@/app/(protected)/_dashboard/components/mobile-d
 import SidebarDashboard from "@/app/(protected)/_dashboard/components/sidebar-dashboard"
 import { getRoleNav } from "@/app/(protected)/_dashboard/nav/role-nav"
 import { Navbar } from "@/components/navigation"
+import { ChatWidget } from "@/components/shared/chat-widget"
 import React from "react"
 
 const UserDashboardLayout = ({
@@ -26,6 +27,8 @@ const UserDashboardLayout = ({
         </main>
         <MobileDashboardNav sections={sections} />
       </div>
+
+      <ChatWidget />
     </div>
   )
 }

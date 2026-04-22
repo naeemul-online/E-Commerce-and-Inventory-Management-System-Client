@@ -2,6 +2,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { FeaturedCategories } from "@/components/ui/FeaturedCategories"
 import { HeroSlider } from "@/components/ui/HeroSlider"
 import { useCart } from "@/contexts/cart-context"
 
@@ -66,6 +67,9 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <HeroSlider />
+
+      {/* Featured Categories */}
+      <FeaturedCategories />
 
       {/* Featured Products */}
       <section className="py-16">

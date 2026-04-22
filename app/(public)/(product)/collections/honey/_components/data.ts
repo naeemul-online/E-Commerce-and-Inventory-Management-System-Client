@@ -23,7 +23,7 @@ export const honeyProducts: HoneyProduct[] = [
     discount: 21,
     flag: "Offered Items",
     category: "Sundarban",
-    brand: "GhorerBazar",
+    brand: "NafiyaMart",
   },
   {
     id: "h-2",
@@ -45,7 +45,7 @@ export const honeyProducts: HoneyProduct[] = [
     discount: 17,
     flag: "Offered Items",
     category: "Lichu Flower",
-    brand: "GhorerBazar",
+    brand: "NafiyaMart",
   },
   {
     id: "h-4",
@@ -67,7 +67,7 @@ export const honeyProducts: HoneyProduct[] = [
     discount: 18,
     flag: "Offered Items",
     category: "Honeycomb",
-    brand: "GhorerBazar",
+    brand: "NafiyaMart",
   },
   {
     id: "h-6",
@@ -89,7 +89,7 @@ export const honeyProducts: HoneyProduct[] = [
     discount: 20,
     flag: "Offered Items",
     category: "Crystal Honey",
-    brand: "GhorerBazar",
+    brand: "NafiyaMart",
   },
   {
     id: "h-8",
@@ -111,7 +111,7 @@ export const honeyProducts: HoneyProduct[] = [
     discount: 13,
     flag: "Offered Items",
     category: "Black Seed",
-    brand: "GhorerBazar",
+    brand: "NafiyaMart",
   },
   {
     id: "h-10",
@@ -133,7 +133,7 @@ export const honeyProducts: HoneyProduct[] = [
     discount: 15,
     flag: "Offered Items",
     category: "Sidr",
-    brand: "GhorerBazar",
+    brand: "NafiyaMart",
   },
   {
     id: "h-12",
@@ -158,6 +158,6 @@ export const HONEY_CATEGORIES = [
   "Crystal Honey",
 ] as const
 
-export const HONEY_BRANDS = ["GhorerBazar", "Honeyraj"] as const
+export const HONEY_BRANDS = ["NafiyaMart", "Honeyraj"] as const
 
 export const HONEY_FLAGS = ["New Arrival", "Offered Items"] as const

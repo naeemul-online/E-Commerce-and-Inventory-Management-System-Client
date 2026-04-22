@@ -56,7 +56,7 @@ export function HoneyProductCard({ product }: { product: HoneyProduct }) {
 
       {/* Body */}
       <div className="flex flex-1 flex-col gap-3 p-3">
-        <h3 className="line-clamp-2 min-h-[2.75rem] text-sm leading-snug font-medium text-foreground">
+        <h3 className="line-clamp-2 min-h-11 text-sm leading-snug font-medium text-foreground">
           {product.name}
         </h3>
 

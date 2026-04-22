@@ -28,7 +28,10 @@ function NativeSelect({
   return (
     <div className="flex items-center gap-2">
       {label ? (
-        <label htmlFor={id} className="text-sm text-muted-foreground">
+        <label
+          htmlFor={id}
+          className="hidden text-sm text-muted-foreground md:block"
+        >
           {label}
         </label>
       ) : null}
@@ -63,7 +66,11 @@ function NativeSelect({
   )
 }
 
-export function HoneyControlsBar({ totalCount: _totalCount }: { totalCount: number }) {
+export function HoneyControlsBar({
+  totalCount: _totalCount,
+}: {
+  totalCount: number
+}) {
   const [sort, setSort] = useState("default")
   const [layout, setLayout] = useState("default")
 

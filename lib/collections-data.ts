@@ -3,6 +3,87 @@ import type { CollectionConfig, CollectionProduct } from "@/types/collection"
 const DEFAULT_IMAGE =
   "https://res.cloudinary.com/dsieyc8m2/image/upload/v1776360259/g1b6li1pzvf73qu59dn5.webp"
 
+// Oil & Ghee Collection
+export const oilGheeProducts: CollectionProduct[] = [
+  {
+    id: "og-1",
+    name: "Extra Virgin Olive Oil (500ml)",
+    image: DEFAULT_IMAGE,
+    price: 850,
+    originalPrice: 1000,
+    discount: 15,
+    flag: "New Arrival",
+    category: "Olive Oil",
+    brand: "OliveGold",
+  },
+  {
+    id: "og-2",
+    name: "Pure Coconut Oil (500ml)",
+    image: DEFAULT_IMAGE,
+    price: 420,
+    originalPrice: 500,
+    discount: 16,
+    flag: "Offered Items",
+    category: "Coconut Oil",
+    brand: "CocoNature",
+  },
+  {
+    id: "og-3",
+    name: "Premium Desi Ghee (500g)",
+    image: DEFAULT_IMAGE,
+    price: 680,
+    originalPrice: 800,
+    discount: 15,
+    flag: "New Arrival",
+    category: "Pure Ghee",
+    brand: "GheePure",
+  },
+  {
+    id: "og-4",
+    name: "Light Olive Oil (1L)",
+    image: DEFAULT_IMAGE,
+    price: 1200,
+    originalPrice: 1400,
+    discount: 14,
+    flag: "Offered Items",
+    category: "Olive Oil",
+    brand: "OliveGold",
+  },
+  {
+    id: "og-5",
+    name: "Virgin Coconut Oil (1L)",
+    image: DEFAULT_IMAGE,
+    price: 750,
+    originalPrice: 900,
+    discount: 17,
+    flag: "New Arrival",
+    category: "Coconut Oil",
+    brand: "CocoNature",
+  },
+  {
+    id: "og-6",
+    name: "Organic Cow Ghee (1kg)",
+    image: DEFAULT_IMAGE,
+    price: 1350,
+    originalPrice: 1600,
+    discount: 16,
+    flag: "Offered Items",
+    category: "Pure Ghee",
+    brand: "GheePure",
+  },
+]
+
+export const oilGheeConfig: CollectionConfig = {
+  slug: "oil-ghee",
+  title: "Oil & Ghee",
+  description:
+    "Premium oils and ghee: Extra virgin olive oil, pure coconut oil, and authentic desi ghee from trusted brands.",
+  categories: ["Olive Oil", "Coconut Oil", "Pure Ghee"],
+  brands: ["OliveGold", "CocoNature", "GheePure"],
+  flags: ["New Arrival", "Offered Items"],
+  products: oilGheeProducts,
+}
+
 // Honey Collection
 export const honeyProducts: CollectionProduct[] = [
   {
@@ -758,6 +839,7 @@ export const floursConfig: CollectionConfig = {
 
 // Collection map for easy lookup
 export const collectionConfigs: Record<string, CollectionConfig> = {
+  "oil-ghee": oilGheeConfig,
   honey: honeyConfig,
   dates: datesConfig,
   organic: organicConfig,
@@ -770,4 +852,77 @@ export const collectionConfigs: Record<string, CollectionConfig> = {
 
 export function getCollectionConfig(slug: string): CollectionConfig | null {
   return collectionConfigs[slug] || null
+}
+
+// Helper to get subcategory label from slug
+export function getSubcategoryLabel(
+  collectionSlug: string,
+  subcategorySlug: string
+): string | null {
+  const config = collectionConfigs[collectionSlug]
+  if (!config) return null
+
+  // Map slug to category name
+  const slugToCategory: Record<string, Record<string, string>> = {
+    "oil-ghee": {
+      "olive-oil": "Olive Oil",
+      "coconut-oil": "Coconut Oil",
+      "pure-ghee": "Pure Ghee",
+    },
+    honey: {
+      sundarban: "Sundarban",
+      "black-seed": "Black Seed",
+      "lichu-flower": "Lichu Flower",
+      sidr: "Sidr",
+      honeycomb: "Honeycomb",
+      organic: "Organic",
+      "crystal-honey": "Crystal Honey",
+    },
+    dates: {
+      ajwa: "Ajwa",
+      medjool: "Medjool",
+      safawi: "Safawi",
+      khudri: "Khudri",
+      sukkari: "Sukkari",
+      mabroom: "Mabroom",
+      "deglet-noor": "Deglet Noor",
+      zahidi: "Zahidi",
+    },
+    spices: {
+      "ground-spices": "Ground Spices",
+      "whole-spices": "Whole Spices",
+      blends: "Blends",
+    },
+    "nuts-seeds": {
+      almonds: "Almonds",
+      cashews: "Cashews",
+      walnuts: "Walnuts",
+      pistachios: "Pistachios",
+      mixed: "Mixed",
+      seeds: "Seeds",
+    },
+    beverage: {
+      tea: "Tea",
+      coffee: "Coffee",
+    },
+    rice: {
+      basmati: "Basmati",
+      aromatic: "Aromatic",
+      miniket: "Miniket",
+      "brown-rice": "Brown Rice",
+      sticky: "Sticky",
+    },
+    "flours-lentils": {
+      flour: "Flour",
+      lentils: "Lentils",
+    },
+    organic: {
+      rice: "Rice",
+      grains: "Grains",
+      seeds: "Seeds",
+      oils: "Oils",
+    },
+  }
+
+  return slugToCategory[collectionSlug]?.[subcategorySlug] || null
 }

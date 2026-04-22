@@ -1,9 +1,9 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
-import { Minus, Plus } from "lucide-react"
+import { ChevronDown, ChevronUp, Filter, X } from "lucide-react"
 import { useState } from "react"
 
 type CheckboxRowProps = {
@@ -52,55 +52,63 @@ function FilterCard({ title, children, defaultOpen = true }: FilterCardProps) {
         aria-expanded={open}
         aria-controls={contentId}
         className={cn(
-          "flex w-full items-start justify-between gap-3 px-5 pt-5 pb-3 text-left",
+          "flex w-full items-center justify-between gap-3 px-4 py-3 text-left",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         )}
       >
-        <div className="flex flex-col items-start gap-1.5">
-          <h3 className="text-sm font-bold tracking-tight text-foreground">
-            {title}
-          </h3>
-          <span
-            aria-hidden="true"
-            className="h-[3px] w-10 rounded-full bg-primary"
-          />
-        </div>
+        <h3 className="text-sm font-semibold text-foreground">{title}</h3>
         {open ? (
-          <Minus className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+          <ChevronUp className="size-4 text-muted-foreground" aria-hidden="true" />
         ) : (
-          <Plus className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+          <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
         )}
         <span className="sr-only">{open ? "Collapse" : "Expand"} {title}</span>
       </button>
-      {open ? (
-        <div id={contentId} className="px-5 pt-1 pb-5">
-          {children}
+      <div
+        id={contentId}
+        className={cn(
+          "grid transition-all duration-200",
+          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        )}
+      >
+        <div className="overflow-hidden">
+          <div className="px-4 pb-4">{children}</div>
         </div>
-      ) : null}
+      </div>
     </div>
   )
 }
 
 type CollectionFilterSidebarProps = {
-  slug: string
-  categories: readonly string[]
-  brands: readonly string[]
-  flags: readonly string[]
+  categories: string[]
+  brands: string[]
+  flags: string[]
+  selectedCategories: string[]
+  selectedBrands: string[]
+  selectedFlags: string[]
+  priceRange: [number, number]
+  onCategoryChange: (categories: string[]) => void
+  onBrandChange: (brands: string[]) => void
+  onFlagChange: (flags: string[]) => void
+  onPriceChange: (range: [number, number]) => void
   className?: string
 }
 
 export function CollectionFilterSidebar({
-  slug,
   categories,
   brands,
   flags,
+  selectedCategories,
+  selectedBrands,
+  selectedFlags,
+  priceRange,
+  onCategoryChange,
+  onBrandChange,
+  onFlagChange,
+  onPriceChange,
   className,
 }: CollectionFilterSidebarProps) {
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([])
-  const [selectedFlags, setSelectedFlags] = useState<string[]>([])
-  const [minPrice, setMinPrice] = useState("")
-  const [maxPrice, setMaxPrice] = useState("")
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   const toggle = (
     value: string,
@@ -112,91 +120,167 @@ export function CollectionFilterSidebar({
     )
   }
 
-  return (
-    <aside
-      className={cn("w-full shrink-0 flex-col gap-4", className)}
-      aria-label={`${slug} filters`}
-    >
-      <FilterCard title="Filter By Category">
+  const clearAllFilters = () => {
+    onCategoryChange([])
+    onBrandChange([])
+    onFlagChange([])
+    onPriceChange([0, 5000])
+  }
+
+  const hasActiveFilters =
+    selectedCategories.length > 0 ||
+    selectedBrands.length > 0 ||
+    selectedFlags.length > 0 ||
+    priceRange[0] > 0 ||
+    priceRange[1] < 5000
+
+  const filterContent = (
+    <div className="flex flex-col gap-4">
+      {/* Active Filters & Clear All */}
+      {hasActiveFilters && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm font-medium text-muted-foreground">
+            Active filters:
+          </span>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearAllFilters}
+            className="h-7 px-2 text-xs text-destructive hover:text-destructive"
+          >
+            <X className="mr-1 size-3" />
+            Clear all
+          </Button>
+        </div>
+      )}
+
+      {/* Categories */}
+      <FilterCard title="Categories">
         <div className="flex flex-col">
           {categories.map((cat) => (
             <CheckboxRow
               key={cat}
-              id={`${slug}-cat-${cat}`}
+              id={`cat-${cat}`}
               label={cat}
               checked={selectedCategories.includes(cat)}
               onCheckedChange={() =>
-                toggle(cat, selectedCategories, setSelectedCategories)
+                toggle(cat, selectedCategories, onCategoryChange)
               }
             />
           ))}
         </div>
       </FilterCard>
 
-      <FilterCard title="Price">
-        <div className="flex items-center gap-2">
-          <Input
-            id={`${slug}-price-min`}
-            type="number"
-            inputMode="numeric"
-            placeholder="min"
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
-            className="h-9 flex-1"
+      {/* Price Range */}
+      <FilterCard title="Price Range">
+        <div className="space-y-4">
+          <Slider
+            value={priceRange}
+            onValueChange={(value) => onPriceChange(value as [number, number])}
             min={0}
-            aria-label="Minimum price"
+            max={5000}
+            step={50}
+            className="w-full"
           />
-          <span aria-hidden="true" className="text-muted-foreground">
-            -
-          </span>
-          <Input
-            id={`${slug}-price-max`}
-            type="number"
-            inputMode="numeric"
-            placeholder="max"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            className="h-9 flex-1"
-            min={0}
-            aria-label="Maximum price"
-          />
-          <Button type="button" className="h-9 px-4">
-            Go
-          </Button>
+          <div className="flex items-center justify-between text-sm text-muted-foreground">
+            <span>৳{priceRange[0]}</span>
+            <span>৳{priceRange[1]}</span>
+          </div>
         </div>
       </FilterCard>
 
+      {/* Brands */}
       <FilterCard title="Brands">
         <div className="flex flex-col">
           {brands.map((brand) => (
             <CheckboxRow
               key={brand}
-              id={`${slug}-brand-${brand}`}
+              id={`brand-${brand}`}
               label={brand}
               checked={selectedBrands.includes(brand)}
               onCheckedChange={() =>
-                toggle(brand, selectedBrands, setSelectedBrands)
+                toggle(brand, selectedBrands, onBrandChange)
               }
             />
           ))}
         </div>
       </FilterCard>
 
+      {/* Product Flags */}
       <FilterCard title="Product Flag">
         <div className="flex flex-col">
           {flags.map((flag) => (
             <CheckboxRow
               key={flag}
-              id={`${slug}-flag-${flag}`}
+              id={`flag-${flag}`}
               label={flag}
               checked={selectedFlags.includes(flag)}
-              onCheckedChange={() =>
-                toggle(flag, selectedFlags, setSelectedFlags)
-              }
+              onCheckedChange={() => toggle(flag, selectedFlags, onFlagChange)}
             />
           ))}
         </div>
       </FilterCard>
-    </aside>
+    </div>
+  )
+
+  return (
+    <>
+      {/* Mobile Filter Button */}
+      <div className="lg:hidden">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setMobileOpen(true)}
+          className="mb-4 gap-2"
+        >
+          <Filter className="size-4" />
+          Filters
+          {hasActiveFilters && (
+            <span className="ml-1 rounded-full bg-primary px-1.5 py-0.5 text-xs text-primary-foreground">
+              {selectedCategories.length +
+                selectedBrands.length +
+                selectedFlags.length}
+            </span>
+          )}
+        </Button>
+      </div>
+
+      {/* Mobile Filter Drawer */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setMobileOpen(false)}
+          />
+          <div className="absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-2xl bg-background p-4">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Filters</h2>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setMobileOpen(false)}
+              >
+                <X className="size-5" />
+              </Button>
+            </div>
+            {filterContent}
+            <Button
+              className="mt-4 w-full"
+              onClick={() => setMobileOpen(false)}
+            >
+              Apply Filters
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Sidebar */}
+      <aside
+        className={cn("hidden w-64 shrink-0 flex-col gap-4 lg:flex", className)}
+        aria-label="Product filters"
+      >
+        {filterContent}
+      </aside>
+    </>
   )
 }

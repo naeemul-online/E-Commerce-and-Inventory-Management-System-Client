@@ -4,11 +4,7 @@ import { cn } from "@/lib/utils"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useState } from "react"
 
-type CollectionPaginationProps = {
-  totalPages?: number
-}
-
-export function CollectionPagination({ totalPages = 2 }: CollectionPaginationProps) {
+export function CollectionPagination({ totalPages = 2 }: { totalPages?: number }) {
   const [page, setPage] = useState(1)
 
   const goTo = (next: number) => {

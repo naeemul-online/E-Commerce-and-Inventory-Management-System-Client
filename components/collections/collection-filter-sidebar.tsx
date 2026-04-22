@@ -83,9 +83,9 @@ function FilterCard({ title, children, defaultOpen = true }: FilterCardProps) {
 
 type CollectionFilterSidebarProps = {
   slug: string
-  categories: readonly string[]
-  brands: readonly string[]
-  flags: readonly string[]
+  categories: string[]
+  brands: string[]
+  flags: string[]
   className?: string
 }
 

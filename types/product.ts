@@ -38,3 +38,54 @@ export interface ProductListResponse {
   meta?: ProductListMeta
   data: ProductListItem[] | ProductListItem | null
 }
+
+// Product Details Page Types
+export type ProductImage = {
+  id: string
+  url: string
+  alt: string
+}
+
+export type ProductReview = {
+  id: string
+  author: string
+  email: string
+  rating: number
+  content: string
+  date: string
+}
+
+export type ProductBenefit = {
+  title: string
+  description: string
+}
+
+export type ProductDetails = {
+  id: string
+  name: string
+  slug: string
+  collectionSlug: string
+  images: ProductImage[]
+  price: number
+  originalPrice: number
+  discount: number
+  flag: "New Arrival" | "Offered Items"
+  category: string
+  subcategory?: string
+  brand: string
+  brandLogo?: string
+  description: string
+  benefits: ProductBenefit[]
+  countryOfOrigin: string
+  inStock: boolean
+  stockQuantity: number
+  reviews: ProductReview[]
+  averageRating: number
+  totalReviews: number
+}
+
+export type RatingBreakdown = {
+  stars: number
+  count: number
+  percentage: number
+}

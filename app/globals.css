@@ -137,3 +137,12 @@
   outline: none;
   margin-left: 10px;
 }
+
+/* Hide scrollbar across browsers (used by horizontal marquee rows). */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

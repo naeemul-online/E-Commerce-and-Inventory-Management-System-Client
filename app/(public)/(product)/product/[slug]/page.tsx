@@ -1,7 +1,11 @@
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { ProductDetailsPage } from "@/components/product"
-import { getProductBySlug, getAllProductSlugs } from "@/lib/products-data"
+import {
+  getProductBySlug,
+  getAllProductSlugs,
+  getCollectionConfig,
+} from "@/lib/collections-data"
 
 interface ProductPageProps {
   params: Promise<{
@@ -22,13 +26,15 @@ export async function generateMetadata({
     }
   }
 
+  const collectionConfig = getCollectionConfig(product.collectionSlug)
+
   return {
     title: `${product.name} | Buy Online`,
-    description: product.description.slice(0, 160),
+    description: `Buy ${product.name} from ${product.brand}. ${collectionConfig?.description || ""}`,
     openGraph: {
       title: product.name,
-      description: product.description.slice(0, 160),
-      images: product.images[0]?.url ? [product.images[0].url] : [],
+      description: `Buy ${product.name} from ${product.brand}. Price: ৳${product.price}`,
+      images: product.image ? [product.image] : [],
     },
   }
 }
@@ -46,5 +52,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound()
   }
 
-  return <ProductDetailsPage product={product} />
+  const collectionConfig = getCollectionConfig(product.collectionSlug)
+
+  return (
+    <ProductDetailsPage
+      product={product}
+      collectionTitle={collectionConfig?.title || product.collectionSlug}
+    />
+  )
 }

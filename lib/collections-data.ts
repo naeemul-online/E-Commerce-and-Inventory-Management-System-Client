@@ -8,6 +8,7 @@ export const oilGheeProducts: CollectionProduct[] = [
   {
     id: "og-1",
     name: "Extra Virgin Olive Oil (500ml)",
+    slug: "extra-virgin-olive-oil-500ml",
     image: DEFAULT_IMAGE,
     price: 850,
     originalPrice: 1000,
@@ -19,6 +20,7 @@ export const oilGheeProducts: CollectionProduct[] = [
   {
     id: "og-2",
     name: "Pure Coconut Oil (500ml)",
+    slug: "pure-coconut-oil-500ml",
     image: DEFAULT_IMAGE,
     price: 420,
     originalPrice: 500,
@@ -30,6 +32,7 @@ export const oilGheeProducts: CollectionProduct[] = [
   {
     id: "og-3",
     name: "Premium Desi Ghee (500g)",
+    slug: "premium-desi-ghee-500g",
     image: DEFAULT_IMAGE,
     price: 680,
     originalPrice: 800,
@@ -41,6 +44,7 @@ export const oilGheeProducts: CollectionProduct[] = [
   {
     id: "og-4",
     name: "Light Olive Oil (1L)",
+    slug: "light-olive-oil-1l",
     image: DEFAULT_IMAGE,
     price: 1200,
     originalPrice: 1400,
@@ -52,6 +56,7 @@ export const oilGheeProducts: CollectionProduct[] = [
   {
     id: "og-5",
     name: "Virgin Coconut Oil (1L)",
+    slug: "virgin-coconut-oil-1l",
     image: DEFAULT_IMAGE,
     price: 750,
     originalPrice: 900,
@@ -63,6 +68,7 @@ export const oilGheeProducts: CollectionProduct[] = [
   {
     id: "og-6",
     name: "Organic Cow Ghee (1kg)",
+    slug: "organic-cow-ghee-1kg",
     image: DEFAULT_IMAGE,
     price: 1350,
     originalPrice: 1600,
@@ -89,6 +95,7 @@ export const honeyProducts: CollectionProduct[] = [
   {
     id: "h-1",
     name: "Sundarban Pure Honey (500g)",
+    slug: "sundarban-pure-honey-500g",
     image: DEFAULT_IMAGE,
     price: 620,
     originalPrice: 780,
@@ -100,6 +107,7 @@ export const honeyProducts: CollectionProduct[] = [
   {
     id: "h-2",
     name: "Black Seed (Kalojira) Honey (250g)",
+    slug: "black-seed-kalojira-honey-250g",
     image: DEFAULT_IMAGE,
     price: 890,
     originalPrice: 1050,
@@ -111,6 +119,7 @@ export const honeyProducts: CollectionProduct[] = [
   {
     id: "h-3",
     name: "Lichu Flower Honey (500g)",
+    slug: "lichu-flower-honey-500g",
     image: DEFAULT_IMAGE,
     price: 540,
     originalPrice: 650,
@@ -122,6 +131,7 @@ export const honeyProducts: CollectionProduct[] = [
   {
     id: "h-4",
     name: "Sidr Mountain Honey (250g)",
+    slug: "sidr-mountain-honey-250g",
     image: DEFAULT_IMAGE,
     price: 1250,
     originalPrice: 1500,
@@ -133,6 +143,7 @@ export const honeyProducts: CollectionProduct[] = [
   {
     id: "h-5",
     name: "Raw Honeycomb Block (400g)",
+    slug: "raw-honeycomb-block-400g",
     image: DEFAULT_IMAGE,
     price: 980,
     originalPrice: 1200,
@@ -144,6 +155,7 @@ export const honeyProducts: CollectionProduct[] = [
   {
     id: "h-6",
     name: "Organic Wild Honey (1kg)",
+    slug: "organic-wild-honey-1kg",
     image: DEFAULT_IMAGE,
     price: 1450,
     originalPrice: 1700,
@@ -155,6 +167,7 @@ export const honeyProducts: CollectionProduct[] = [
   {
     id: "h-7",
     name: "Crystal Mustard Honey (500g)",
+    slug: "crystal-mustard-honey-500g",
     image: DEFAULT_IMAGE,
     price: 480,
     originalPrice: 600,
@@ -166,6 +179,7 @@ export const honeyProducts: CollectionProduct[] = [
   {
     id: "h-8",
     name: "Sundarban Khalisha Honey (1kg)",
+    slug: "sundarban-khalisha-honey-1kg",
     image: DEFAULT_IMAGE,
     price: 1180,
     originalPrice: 1400,
@@ -177,6 +191,7 @@ export const honeyProducts: CollectionProduct[] = [
   {
     id: "h-9",
     name: "Black Seed Honey (500g)",
+    slug: "black-seed-honey-500g",
     image: DEFAULT_IMAGE,
     price: 1650,
     originalPrice: 1900,
@@ -188,6 +203,7 @@ export const honeyProducts: CollectionProduct[] = [
   {
     id: "h-10",
     name: "Lichu Flower Honey (1kg)",
+    slug: "lichu-flower-honey-1kg",
     image: DEFAULT_IMAGE,
     price: 980,
     originalPrice: 1200,
@@ -199,6 +215,7 @@ export const honeyProducts: CollectionProduct[] = [
   {
     id: "h-11",
     name: "Sidr Honey (500g)",
+    slug: "sidr-honey-500g",
     image: DEFAULT_IMAGE,
     price: 2200,
     originalPrice: 2600,
@@ -210,6 +227,7 @@ export const honeyProducts: CollectionProduct[] = [
   {
     id: "h-12",
     name: "Raw Organic Honey (500g)",
+    slug: "raw-organic-honey-500g",
     image: DEFAULT_IMAGE,
     price: 720,
     originalPrice: 900,
@@ -244,6 +262,7 @@ export const datesProducts: CollectionProduct[] = [
   {
     id: "d-1",
     name: "Premium Ajwa Dates (500g)",
+    slug: "premium-ajwa-dates-500g",
     image: DEFAULT_IMAGE,
     price: 1850,
     originalPrice: 2200,
@@ -255,6 +274,7 @@ export const datesProducts: CollectionProduct[] = [
   {
     id: "d-2",
     name: "Medjool Dates Large (1kg)",
+    slug: "medjool-dates-large-1kg",
     image: DEFAULT_IMAGE,
     price: 2400,
     originalPrice: 2800,
@@ -266,6 +286,7 @@ export const datesProducts: CollectionProduct[] = [
   {
     id: "d-3",
     name: "Safawi Dates (500g)",
+    slug: "safawi-dates-500g",
     image: DEFAULT_IMAGE,
     price: 680,
     originalPrice: 800,
@@ -277,6 +298,7 @@ export const datesProducts: CollectionProduct[] = [
   {
     id: "d-4",
     name: "Khudri Dates (1kg)",
+    slug: "khudri-dates-1kg",
     image: DEFAULT_IMAGE,
     price: 520,
     originalPrice: 650,
@@ -288,6 +310,7 @@ export const datesProducts: CollectionProduct[] = [
   {
     id: "d-5",
     name: "Sukkari Dates (500g)",
+    slug: "sukkari-dates-500g",
     image: DEFAULT_IMAGE,
     price: 1100,
     originalPrice: 1300,
@@ -299,6 +322,7 @@ export const datesProducts: CollectionProduct[] = [
   {
     id: "d-6",
     name: "Mabroom Dates (500g)",
+    slug: "mabroom-dates-500g",
     image: DEFAULT_IMAGE,
     price: 950,
     originalPrice: 1150,
@@ -310,6 +334,7 @@ export const datesProducts: CollectionProduct[] = [
   {
     id: "d-7",
     name: "Deglet Noor Dates (1kg)",
+    slug: "deglet-noor-dates-1kg",
     image: DEFAULT_IMAGE,
     price: 780,
     originalPrice: 950,
@@ -321,6 +346,7 @@ export const datesProducts: CollectionProduct[] = [
   {
     id: "d-8",
     name: "Zahidi Dates (500g)",
+    slug: "zahidi-dates-500g",
     image: DEFAULT_IMAGE,
     price: 450,
     originalPrice: 550,
@@ -356,6 +382,7 @@ export const organicProducts: CollectionProduct[] = [
   {
     id: "o-1",
     name: "Organic Brown Rice (1kg)",
+    slug: "organic-brown-rice-1kg",
     image: DEFAULT_IMAGE,
     price: 180,
     originalPrice: 220,
@@ -367,6 +394,7 @@ export const organicProducts: CollectionProduct[] = [
   {
     id: "o-2",
     name: "Organic Quinoa (500g)",
+    slug: "organic-quinoa-500g",
     image: DEFAULT_IMAGE,
     price: 650,
     originalPrice: 780,
@@ -378,6 +406,7 @@ export const organicProducts: CollectionProduct[] = [
   {
     id: "o-3",
     name: "Organic Chia Seeds (250g)",
+    slug: "organic-chia-seeds-250g",
     image: DEFAULT_IMAGE,
     price: 450,
     originalPrice: 550,
@@ -389,6 +418,7 @@ export const organicProducts: CollectionProduct[] = [
   {
     id: "o-4",
     name: "Organic Flax Seeds (500g)",
+    slug: "organic-flax-seeds-500g",
     image: DEFAULT_IMAGE,
     price: 320,
     originalPrice: 400,
@@ -400,6 +430,7 @@ export const organicProducts: CollectionProduct[] = [
   {
     id: "o-5",
     name: "Organic Coconut Oil (500ml)",
+    slug: "organic-coconut-oil-500ml",
     image: DEFAULT_IMAGE,
     price: 580,
     originalPrice: 700,
@@ -411,6 +442,7 @@ export const organicProducts: CollectionProduct[] = [
   {
     id: "o-6",
     name: "Organic Olive Oil (500ml)",
+    slug: "organic-olive-oil-500ml",
     image: DEFAULT_IMAGE,
     price: 1200,
     originalPrice: 1450,
@@ -437,6 +469,7 @@ export const spicesProducts: CollectionProduct[] = [
   {
     id: "s-1",
     name: "Premium Turmeric Powder (200g)",
+    slug: "premium-turmeric-powder-200g",
     image: DEFAULT_IMAGE,
     price: 120,
     originalPrice: 150,
@@ -448,6 +481,7 @@ export const spicesProducts: CollectionProduct[] = [
   {
     id: "s-2",
     name: "Whole Cumin Seeds (250g)",
+    slug: "whole-cumin-seeds-250g",
     image: DEFAULT_IMAGE,
     price: 180,
     originalPrice: 220,
@@ -459,6 +493,7 @@ export const spicesProducts: CollectionProduct[] = [
   {
     id: "s-3",
     name: "Red Chili Powder (200g)",
+    slug: "red-chili-powder-200g",
     image: DEFAULT_IMAGE,
     price: 95,
     originalPrice: 120,
@@ -470,6 +505,7 @@ export const spicesProducts: CollectionProduct[] = [
   {
     id: "s-4",
     name: "Cinnamon Sticks (100g)",
+    slug: "cinnamon-sticks-100g",
     image: DEFAULT_IMAGE,
     price: 220,
     originalPrice: 280,
@@ -481,6 +517,7 @@ export const spicesProducts: CollectionProduct[] = [
   {
     id: "s-5",
     name: "Garam Masala (150g)",
+    slug: "garam-masala-150g",
     image: DEFAULT_IMAGE,
     price: 165,
     originalPrice: 200,
@@ -492,6 +529,7 @@ export const spicesProducts: CollectionProduct[] = [
   {
     id: "s-6",
     name: "Black Pepper Whole (200g)",
+    slug: "black-pepper-whole-200g",
     image: DEFAULT_IMAGE,
     price: 350,
     originalPrice: 420,
@@ -518,6 +556,7 @@ export const nutsProducts: CollectionProduct[] = [
   {
     id: "n-1",
     name: "Premium Almonds (500g)",
+    slug: "premium-almonds-500g",
     image: DEFAULT_IMAGE,
     price: 850,
     originalPrice: 1000,
@@ -529,6 +568,7 @@ export const nutsProducts: CollectionProduct[] = [
   {
     id: "n-2",
     name: "Cashew Nuts (500g)",
+    slug: "cashew-nuts-500g",
     image: DEFAULT_IMAGE,
     price: 780,
     originalPrice: 950,
@@ -540,6 +580,7 @@ export const nutsProducts: CollectionProduct[] = [
   {
     id: "n-3",
     name: "Walnuts Premium (250g)",
+    slug: "walnuts-premium-250g",
     image: DEFAULT_IMAGE,
     price: 550,
     originalPrice: 680,
@@ -551,6 +592,7 @@ export const nutsProducts: CollectionProduct[] = [
   {
     id: "n-4",
     name: "Pistachios Roasted (250g)",
+    slug: "pistachios-roasted-250g",
     image: DEFAULT_IMAGE,
     price: 620,
     originalPrice: 750,
@@ -562,6 +604,7 @@ export const nutsProducts: CollectionProduct[] = [
   {
     id: "n-5",
     name: "Mixed Dry Fruits (500g)",
+    slug: "mixed-dry-fruits-500g",
     image: DEFAULT_IMAGE,
     price: 950,
     originalPrice: 1150,
@@ -573,6 +616,7 @@ export const nutsProducts: CollectionProduct[] = [
   {
     id: "n-6",
     name: "Pumpkin Seeds (250g)",
+    slug: "pumpkin-seeds-250g",
     image: DEFAULT_IMAGE,
     price: 320,
     originalPrice: 400,
@@ -599,6 +643,7 @@ export const beverageProducts: CollectionProduct[] = [
   {
     id: "b-1",
     name: "Premium Green Tea (100g)",
+    slug: "premium-green-tea-100g",
     image: DEFAULT_IMAGE,
     price: 280,
     originalPrice: 350,
@@ -610,6 +655,7 @@ export const beverageProducts: CollectionProduct[] = [
   {
     id: "b-2",
     name: "Organic Coffee Beans (500g)",
+    slug: "organic-coffee-beans-500g",
     image: DEFAULT_IMAGE,
     price: 650,
     originalPrice: 800,
@@ -621,6 +667,7 @@ export const beverageProducts: CollectionProduct[] = [
   {
     id: "b-3",
     name: "Chamomile Tea (50g)",
+    slug: "chamomile-tea-50g",
     image: DEFAULT_IMAGE,
     price: 220,
     originalPrice: 280,
@@ -632,6 +679,7 @@ export const beverageProducts: CollectionProduct[] = [
   {
     id: "b-4",
     name: "Instant Coffee Powder (200g)",
+    slug: "instant-coffee-powder-200g",
     image: DEFAULT_IMAGE,
     price: 380,
     originalPrice: 450,
@@ -643,6 +691,7 @@ export const beverageProducts: CollectionProduct[] = [
   {
     id: "b-5",
     name: "Herbal Tea Mix (100g)",
+    slug: "herbal-tea-mix-100g",
     image: DEFAULT_IMAGE,
     price: 320,
     originalPrice: 400,
@@ -654,6 +703,7 @@ export const beverageProducts: CollectionProduct[] = [
   {
     id: "b-6",
     name: "Cold Brew Coffee (500ml)",
+    slug: "cold-brew-coffee-500ml",
     image: DEFAULT_IMAGE,
     price: 180,
     originalPrice: 220,
@@ -680,6 +730,7 @@ export const riceProducts: CollectionProduct[] = [
   {
     id: "r-1",
     name: "Basmati Rice Premium (5kg)",
+    slug: "basmati-rice-premium-5kg",
     image: DEFAULT_IMAGE,
     price: 850,
     originalPrice: 1000,
@@ -691,6 +742,7 @@ export const riceProducts: CollectionProduct[] = [
   {
     id: "r-2",
     name: "Chinigura Rice (2kg)",
+    slug: "chinigura-rice-2kg",
     image: DEFAULT_IMAGE,
     price: 380,
     originalPrice: 450,
@@ -702,6 +754,7 @@ export const riceProducts: CollectionProduct[] = [
   {
     id: "r-3",
     name: "Miniket Rice (5kg)",
+    slug: "miniket-rice-5kg",
     image: DEFAULT_IMAGE,
     price: 420,
     originalPrice: 500,
@@ -713,6 +766,7 @@ export const riceProducts: CollectionProduct[] = [
   {
     id: "r-4",
     name: "Nazirshail Rice (5kg)",
+    slug: "nazirshail-rice-5kg",
     image: DEFAULT_IMAGE,
     price: 450,
     originalPrice: 550,
@@ -724,6 +778,7 @@ export const riceProducts: CollectionProduct[] = [
   {
     id: "r-5",
     name: "Brown Rice (2kg)",
+    slug: "brown-rice-2kg",
     image: DEFAULT_IMAGE,
     price: 280,
     originalPrice: 350,
@@ -735,6 +790,7 @@ export const riceProducts: CollectionProduct[] = [
   {
     id: "r-6",
     name: "Sticky Rice (1kg)",
+    slug: "sticky-rice-1kg",
     image: DEFAULT_IMAGE,
     price: 180,
     originalPrice: 220,
@@ -761,6 +817,7 @@ export const floursProducts: CollectionProduct[] = [
   {
     id: "f-1",
     name: "Whole Wheat Flour (2kg)",
+    slug: "whole-wheat-flour-2kg",
     image: DEFAULT_IMAGE,
     price: 120,
     originalPrice: 150,
@@ -772,6 +829,7 @@ export const floursProducts: CollectionProduct[] = [
   {
     id: "f-2",
     name: "Red Lentils (1kg)",
+    slug: "red-lentils-1kg",
     image: DEFAULT_IMAGE,
     price: 180,
     originalPrice: 220,
@@ -783,6 +841,7 @@ export const floursProducts: CollectionProduct[] = [
   {
     id: "f-3",
     name: "Chickpea Flour (1kg)",
+    slug: "chickpea-flour-1kg",
     image: DEFAULT_IMAGE,
     price: 140,
     originalPrice: 170,
@@ -794,6 +853,7 @@ export const floursProducts: CollectionProduct[] = [
   {
     id: "f-4",
     name: "Yellow Lentils (1kg)",
+    slug: "yellow-lentils-1kg",
     image: DEFAULT_IMAGE,
     price: 160,
     originalPrice: 200,
@@ -805,6 +865,7 @@ export const floursProducts: CollectionProduct[] = [
   {
     id: "f-5",
     name: "Rice Flour (1kg)",
+    slug: "rice-flour-1kg",
     image: DEFAULT_IMAGE,
     price: 95,
     originalPrice: 120,
@@ -816,6 +877,7 @@ export const floursProducts: CollectionProduct[] = [
   {
     id: "f-6",
     name: "Green Lentils (1kg)",
+    slug: "green-lentils-1kg",
     image: DEFAULT_IMAGE,
     price: 220,
     originalPrice: 280,
@@ -852,6 +914,27 @@ export const collectionConfigs: Record<string, CollectionConfig> = {
 
 export function getCollectionConfig(slug: string): CollectionConfig | null {
   return collectionConfigs[slug] || null
+}
+
+// Get all products from all collections
+export function getAllProducts(): CollectionProduct[] {
+  return Object.values(collectionConfigs).flatMap((config) => config.products)
+}
+
+// Get product by slug from any collection
+export function getProductBySlug(slug: string): (CollectionProduct & { collectionSlug: string }) | null {
+  for (const [collectionSlug, config] of Object.entries(collectionConfigs)) {
+    const product = config.products.find((p) => p.slug === slug)
+    if (product) {
+      return { ...product, collectionSlug }
+    }
+  }
+  return null
+}
+
+// Get all product slugs for static generation
+export function getAllProductSlugs(): string[] {
+  return getAllProducts().map((p) => p.slug)
 }
 
 // Helper to get subcategory label from slug

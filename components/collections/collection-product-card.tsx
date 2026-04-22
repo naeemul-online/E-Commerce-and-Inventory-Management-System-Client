@@ -8,19 +8,8 @@ import { ShoppingCart } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
-// Helper to generate product slug from name
-function generateSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[()]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .trim()
-}
-
 export function CollectionProductCard({ product }: { product: CollectionProduct }) {
   const { addItem, setIsOpen } = useCart()
-  const productSlug = generateSlug(product.name)
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -36,7 +25,7 @@ export function CollectionProductCard({ product }: { product: CollectionProduct 
   }
 
   return (
-    <Link href={`/product/${productSlug}`}>
+    <Link href={`/product/${product.slug}`}>
       <article className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-shadow hover:shadow-md">
         {/* Image + Badges */}
         <div className="relative aspect-square w-full overflow-hidden bg-muted">

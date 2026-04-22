@@ -1,6 +1,7 @@
 export type CollectionProduct = {
   id: string
   name: string
+  slug: string
   image: string
   price: number
   originalPrice: number

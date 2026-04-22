@@ -1,23 +1,21 @@
-"use client"
-
 import { ChevronRight } from "lucide-react"
 import Link from "next/link"
 
 type CollectionBreadcrumbsProps = {
-  collectionTitle: string
-  collectionHref?: string
-  subcategoryTitle?: string
+  title: string
+  parentTitle?: string
+  parentHref?: string
 }
 
-export function CollectionBreadcrumbs({
-  collectionTitle,
-  collectionHref,
-  subcategoryTitle,
+export function CollectionBreadcrumbs({ 
+  title, 
+  parentTitle, 
+  parentHref 
 }: CollectionBreadcrumbsProps) {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="mb-4 flex items-center gap-1.5 text-sm text-muted-foreground"
+      className="flex items-center gap-1.5 text-sm text-muted-foreground"
     >
       <Link
         href="/"
@@ -27,22 +25,22 @@ export function CollectionBreadcrumbs({
       </Link>
       <ChevronRight className="size-3.5" aria-hidden="true" />
       
-      {subcategoryTitle && collectionHref ? (
+      {parentTitle && parentHref ? (
         <>
           <Link
-            href={collectionHref}
+            href={parentHref}
             className="transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
           >
-            {collectionTitle}
+            {parentTitle}
           </Link>
           <ChevronRight className="size-3.5" aria-hidden="true" />
           <span className="font-medium text-foreground" aria-current="page">
-            {subcategoryTitle}
+            {title}
           </span>
         </>
       ) : (
         <span className="font-medium text-foreground" aria-current="page">
-          {collectionTitle}
+          {title}
         </span>
       )}
     </nav>

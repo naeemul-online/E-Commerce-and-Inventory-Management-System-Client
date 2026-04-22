@@ -1,7 +1,8 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { ChevronDown, Grid3X3, List } from "lucide-react"
+import { ChevronDown } from "lucide-react"
+import { useState } from "react"
 
 type NativeSelectProps = {
   id: string
@@ -62,76 +63,44 @@ function NativeSelect({
 }
 
 type CollectionControlsBarProps = {
-  totalProducts: number
-  sortBy: string
-  onSortChange: (value: string) => void
-  viewMode: "grid" | "list"
-  onViewModeChange: (mode: "grid" | "list") => void
+  slug: string
+  totalCount: number
 }
 
 export function CollectionControlsBar({
-  totalProducts,
-  sortBy,
-  onSortChange,
-  viewMode,
-  onViewModeChange,
+  slug,
+  totalCount: _totalCount,
 }: CollectionControlsBarProps) {
+  const [sort, setSort] = useState("default")
+  const [layout, setLayout] = useState("default")
+
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card px-4 py-3">
-      {/* Product count */}
-      <p className="text-sm text-muted-foreground">
-        <span className="font-medium text-foreground">{totalProducts}</span>{" "}
-        products found
-      </p>
-
-      <div className="flex items-center gap-3">
-        {/* Sort select */}
-        <NativeSelect
-          id="sort-by"
-          label="Sort By :"
-          value={sortBy}
-          onChange={onSortChange}
-          options={[
-            { label: "Featured", value: "featured" },
-            { label: "Price: Low to High", value: "price-low" },
-            { label: "Price: High to Low", value: "price-high" },
-            { label: "Newest", value: "newest" },
-            { label: "Best Discount", value: "discount" },
-          ]}
-        />
-
-        {/* View mode toggle */}
-        <div className="hidden items-center gap-1 rounded-md border border-border p-1 md:flex">
-          <button
-            type="button"
-            onClick={() => onViewModeChange("grid")}
-            className={cn(
-              "rounded p-1.5 transition-colors",
-              viewMode === "grid"
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-            aria-label="Grid view"
-            aria-pressed={viewMode === "grid"}
-          >
-            <Grid3X3 className="size-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onViewModeChange("list")}
-            className={cn(
-              "rounded p-1.5 transition-colors",
-              viewMode === "list"
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-            aria-label="List view"
-            aria-pressed={viewMode === "list"}
-          >
-            <List className="size-4" />
-          </button>
-        </div>
-      </div>
+      <NativeSelect
+        id={`${slug}-sort`}
+        label="Sort By :"
+        value={sort}
+        onChange={setSort}
+        options={[
+          { label: "Default Sorting", value: "default" },
+          { label: "Price: Low to High", value: "price-asc" },
+          { label: "Price: High to Low", value: "price-desc" },
+          { label: "Name: A to Z", value: "name-asc" },
+          { label: "Newest", value: "newest" },
+        ]}
+      />
+      <NativeSelect
+        id={`${slug}-layout`}
+        value={layout}
+        onChange={setLayout}
+        accent
+        options={[
+          { label: "Default", value: "default" },
+          { label: "12 per page", value: "12" },
+          { label: "24 per page", value: "24" },
+          { label: "48 per page", value: "48" },
+        ]}
+      />
     </div>
   )
 }

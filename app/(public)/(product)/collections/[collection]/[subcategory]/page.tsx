@@ -1,221 +1,99 @@
-"use client"
-
-import { useParams, useRouter, useSearchParams } from "next/navigation"
-import { useCallback, useMemo, useState } from "react"
-
-import {
-  CollectionBreadcrumbs,
-  CollectionControlsBar,
-  CollectionFilterSidebar,
-  CollectionPagination,
-  CollectionProductCard,
-} from "@/components/collections"
+import { notFound } from "next/navigation"
+import { CollectionBreadcrumbs } from "@/components/collections/collection-breadcrumbs"
+import { CollectionControlsBar } from "@/components/collections/collection-controls-bar"
+import { CollectionFilterSidebar } from "@/components/collections/collection-filter-sidebar"
+import { CollectionPagination } from "@/components/collections/collection-pagination"
+import { CollectionProductCard } from "@/components/collections/collection-product-card"
 import { getCollectionConfig, getSubcategoryLabel } from "@/lib/collections-data"
-import type { CollectionProduct } from "@/types/collection"
 
-const ITEMS_PER_PAGE = 12
+type Props = {
+  params: Promise<{ collection: string; subcategory: string }>
+}
 
-export default function SubcategoryPage() {
-  const params = useParams()
-  const router = useRouter()
-  const searchParams = useSearchParams()
-
-  const collectionSlug = params.collection as string
-  const subcategorySlug = params.subcategory as string
-
-  const config = getCollectionConfig(collectionSlug)
-  const subcategoryLabel = getSubcategoryLabel(collectionSlug, subcategorySlug)
-
-  // Filter state
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    subcategoryLabel ? [subcategoryLabel] : []
-  )
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([])
-  const [selectedFlags, setSelectedFlags] = useState<string[]>([])
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000])
-  const [sortBy, setSortBy] = useState("featured")
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
-
-  // Pagination
-  const currentPage = Number(searchParams.get("page")) || 1
-
-  // Filtered and sorted products
-  const filteredProducts = useMemo(() => {
-    if (!config) return []
-
-    let products = config.products.filter((product) => {
-      // Category filter
-      if (
-        selectedCategories.length > 0 &&
-        !selectedCategories.includes(product.category)
-      ) {
-        return false
-      }
-
-      // Brand filter
-      if (selectedBrands.length > 0 && !selectedBrands.includes(product.brand)) {
-        return false
-      }
-
-      // Flag filter
-      if (
-        selectedFlags.length > 0 &&
-        (!product.flag || !selectedFlags.includes(product.flag))
-      ) {
-        return false
-      }
-
-      // Price filter
-      if (product.price < priceRange[0] || product.price > priceRange[1]) {
-        return false
-      }
-
-      return true
-    })
-
-    // Sorting
-    switch (sortBy) {
-      case "price-low":
-        products = [...products].sort((a, b) => a.price - b.price)
-        break
-      case "price-high":
-        products = [...products].sort((a, b) => b.price - a.price)
-        break
-      case "newest":
-        products = [...products].sort((a, b) =>
-          a.flag === "New Arrival" ? -1 : b.flag === "New Arrival" ? 1 : 0
-        )
-        break
-      case "discount":
-        products = [...products].sort(
-          (a, b) => (b.discount || 0) - (a.discount || 0)
-        )
-        break
-      default:
-        break
-    }
-
-    return products
-  }, [config, selectedCategories, selectedBrands, selectedFlags, priceRange, sortBy])
-
-  // Pagination
-  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE)
-  const paginatedProducts = filteredProducts.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  )
-
-  const handlePageChange = useCallback(
-    (page: number) => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set("page", page.toString())
-      router.push(`?${params.toString()}`, { scroll: false })
-    },
-    [router, searchParams]
-  )
-
-  const handleAddToCart = (product: CollectionProduct) => {
-    console.log("Add to cart:", product)
-  }
-
-  const handleQuickView = (product: CollectionProduct) => {
-    console.log("Quick view:", product)
-  }
+export async function generateMetadata({ params }: Props) {
+  const { collection, subcategory } = await params
+  const config = getCollectionConfig(collection)
+  const subcategoryLabel = getSubcategoryLabel(collection, subcategory)
 
   if (!config || !subcategoryLabel) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <p className="text-muted-foreground">Collection not found</p>
-      </div>
-    )
+    return {
+      title: "Not Found",
+    }
   }
 
-  const pageTitle = `${subcategoryLabel} - ${config.title}`
-  const pageDescription = `Browse our collection of ${subcategoryLabel.toLowerCase()} in ${config.title.toLowerCase()}.`
+  return {
+    title: `${subcategoryLabel} ${config.title} — Premium Quality Products`,
+    description: `Browse our collection of premium ${subcategoryLabel.toLowerCase()} in ${config.title.toLowerCase()}.`,
+  }
+}
+
+export default async function SubcategoryPage({ params }: Props) {
+  const { collection, subcategory } = await params
+  const config = getCollectionConfig(collection)
+  const subcategoryLabel = getSubcategoryLabel(collection, subcategory)
+
+  if (!config || !subcategoryLabel) {
+    notFound()
+  }
+
+  // Filter products by subcategory
+  const filteredProducts = config.products.filter(
+    (product) => product.category === subcategoryLabel
+  )
+
+  const pageTitle = `${subcategoryLabel} ${config.title}`
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-7xl px-4 py-6">
-        {/* Breadcrumbs */}
+    <main className="flex flex-col gap-4 bg-muted/40 py-6 md:gap-5">
+      {/* Title + Breadcrumbs banner */}
+      <header className="flex flex-wrap items-center justify-between gap-2">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+          {pageTitle}
+        </h1>
         <CollectionBreadcrumbs
-          collectionTitle={config.title}
-          collectionHref={`/collections/${collectionSlug}`}
-          subcategoryTitle={subcategoryLabel}
+          title={subcategoryLabel}
+          parentTitle={config.title}
+          parentHref={`/collections/${collection}`}
+        />
+      </header>
+
+      {/* Content grid */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[260px_1fr] lg:gap-5">
+        {/* Sidebar (desktop only) */}
+        <CollectionFilterSidebar
+          slug={`${collection}-${subcategory}`}
+          categories={config.categories}
+          brands={config.brands}
+          flags={config.flags}
+          className="hidden lg:flex"
         />
 
-        {/* Page Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-foreground md:text-3xl">
-            {pageTitle}
-          </h1>
-          <p className="mt-2 text-muted-foreground">{pageDescription}</p>
-        </div>
-
-        {/* Controls Bar */}
-        <CollectionControlsBar
-          totalProducts={filteredProducts.length}
-          sortBy={sortBy}
-          onSortChange={setSortBy}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
-        />
-
-        {/* Main Content */}
-        <div className="mt-6 flex flex-col gap-6 lg:flex-row">
-          {/* Filter Sidebar */}
-          <CollectionFilterSidebar
-            categories={config.categories}
-            brands={config.brands}
-            flags={config.flags}
-            selectedCategories={selectedCategories}
-            selectedBrands={selectedBrands}
-            selectedFlags={selectedFlags}
-            priceRange={priceRange}
-            onCategoryChange={setSelectedCategories}
-            onBrandChange={setSelectedBrands}
-            onFlagChange={setSelectedFlags}
-            onPriceChange={setPriceRange}
+        {/* Main column */}
+        <section className="flex flex-col gap-4 lg:gap-5">
+          <CollectionControlsBar
+            slug={`${collection}-${subcategory}`}
+            totalCount={filteredProducts.length}
           />
 
-          {/* Product Grid */}
-          <div className="flex-1">
-            {paginatedProducts.length === 0 ? (
-              <div className="flex min-h-[300px] items-center justify-center rounded-lg border border-dashed">
-                <p className="text-muted-foreground">
-                  No products found matching your filters.
-                </p>
-              </div>
-            ) : (
-              <div
-                className={
-                  viewMode === "grid"
-                    ? "grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"
-                    : "flex flex-col gap-4"
-                }
-              >
-                {paginatedProducts.map((product) => (
-                  <CollectionProductCard
-                    key={product.id}
-                    product={product}
-                    viewMode={viewMode}
-                    onAddToCart={handleAddToCart}
-                    onQuickView={handleQuickView}
-                  />
-                ))}
-              </div>
-            )}
+          {filteredProducts.length === 0 ? (
+            <div className="flex min-h-[300px] items-center justify-center rounded-lg border border-dashed">
+              <p className="text-muted-foreground">
+                No products found in this category.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
+              {filteredProducts.map((product) => (
+                <CollectionProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <CollectionPagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            )}
-          </div>
-        </div>
+          <CollectionPagination
+            totalPages={Math.ceil(filteredProducts.length / 12) || 1}
+          />
+        </section>
       </div>
-    </div>
+    </main>
   )
 }

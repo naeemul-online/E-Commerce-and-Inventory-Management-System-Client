@@ -1,18 +1,108 @@
-import ProductCategoryCreateForm from "../products/_components/ProductCategoryCreateForm"
+import { FolderTree } from "lucide-react"
 
-const CategoriesPage = () => {
+import { Card } from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { getCategories } from "@/services/category/get-categories"
+
+import CopyIdButton from "../_shared/CopyIdButton"
+import AddCategoryButton from "./_components/AddCategoryButton"
+
+const formatDate = (value?: string) => {
+  if (!value) return "—"
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return "—"
+  return date.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  })
+}
+
+const CategoriesPage = async () => {
+  const { data: categories, success, message } = await getCategories()
+
   return (
     <section className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          Product Categories
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Create category first, then use the category while adding a product.
-        </p>
-      </div>
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Product categories
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Create categories first, then pick one when adding a product.
+          </p>
+        </div>
+        <AddCategoryButton className="w-full sm:w-auto" />
+      </header>
 
-      <ProductCategoryCreateForm />
+      {!success ? (
+        <Card className="border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
+          {message || "Failed to load categories."}
+        </Card>
+      ) : null}
+
+      <Card className="overflow-hidden border bg-card p-0 shadow-sm">
+        <div className="flex items-center justify-between border-b px-4 py-3">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <FolderTree
+              className="h-4 w-4 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <span>All categories</span>
+          </div>
+          <span className="text-xs text-muted-foreground">
+            {categories.length} total
+          </span>
+        </div>
+
+        {categories.length === 0 ? (
+          <div className="px-6 py-12 text-center text-sm text-muted-foreground">
+            No categories yet. Use{" "}
+            <span className="font-medium text-foreground">Add category</span> to
+            create your first one.
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Slug</TableHead>
+                  <TableHead>ID</TableHead>
+                  <TableHead className="text-right">Created</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {categories.map((category) => (
+                  <TableRow key={category.id}>
+                    <TableCell className="font-medium">
+                      {category.name}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-xs">
+                        {category.slug}
+                      </code>
+                    </TableCell>
+                    <TableCell>
+                      <CopyIdButton id={category.id} />
+                    </TableCell>
+                    <TableCell className="text-right text-sm text-muted-foreground">
+                      {formatDate(category.createdAt)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+      </Card>
     </section>
   )
 }

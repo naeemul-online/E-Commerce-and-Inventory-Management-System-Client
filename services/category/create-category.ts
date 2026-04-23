@@ -1,5 +1,7 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
+
 import { serverFetch } from "@/lib/server-fetch"
 import { CreateCategoryOutput } from "@/lib/validators/category"
 import { CreateCategoryResponse } from "@/types/category"
@@ -13,6 +15,12 @@ export const createCategory = async (
     })
 
     const data = (await res.json()) as CreateCategoryResponse
+
+    if (data?.success) {
+      revalidatePath("/admin/dashboard/categories")
+      revalidatePath("/admin/dashboard/products")
+    }
+
     return data
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

@@ -1,22 +1,8 @@
-import { serverFetch } from "./server-fetch"
-import { fakeFetch } from "./fake-fetch"
-
 /**
- * Unified transport used by service modules. Swap all services from
- * `serverFetch` to `apiFetch` to make them mock-swappable without touching
- * the service logic.
+ * @deprecated Mock-vs-real routing now lives inside `serverFetch` itself
+ * (see `lib/server-fetch.ts`). Import `serverFetch` directly in new code.
  *
- * Toggle behaviour:
- *   - `NEXT_PUBLIC_USE_FAKE_API=true` (or `USE_FAKE_API=true`) → fakeFetch
- *   - anything else (default)                                  → serverFetch
- *
- * The public surface (get/post/put/patch/delete) is identical to serverFetch,
- * so existing code keeps working.
+ * This module is kept as a pass-through alias so previously migrated files
+ * keep compiling.
  */
-const USE_FAKE_API =
-  process.env.NEXT_PUBLIC_USE_FAKE_API === "true" ||
-  process.env.USE_FAKE_API === "true"
-
-export const apiFetch = USE_FAKE_API ? fakeFetch : serverFetch
-
-export const isFakeApiEnabled = USE_FAKE_API
+export { serverFetch as apiFetch } from "./server-fetch"

@@ -4,13 +4,15 @@ import { matchRoute, type MockContext, type MockMethod } from "./mocks/types"
 /**
  * Reusable fake fetch that mirrors the public surface of `serverFetch`.
  *
- * Usage is identical to `serverFetch`:
- *   const res = await fakeFetch.get("/products?page=1")
- *   const json = await res.json()
- *
  * Route handlers live in `lib/mocks/*.mock.ts` and are aggregated in
  * `lib/mocks/index.ts`. This keeps per-feature mock data isolated while the
  * transport layer stays shared.
+ *
+ * Two entry points are exported:
+ *   - `fakeFetch`      → standalone helper. Unmatched routes return 404.
+ *   - `tryMockFetch`   → returns a Response when a mock matches, otherwise
+ *                        `null`. Used by `server-fetch` so it can transparently
+ *                        fall through to the real backend when no mock exists.
  */
 
 const DEFAULT_DELAY_MS = 120
@@ -35,22 +37,29 @@ function parseBody(options: RequestInit): unknown {
   return options.body
 }
 
-async function fakeFetchHelper(
-  endpoint: string,
-  options: RequestInit
-): Promise<Response> {
+function normalizePath(endpoint: string): {
+  pathname: string
+  query: URLSearchParams
+} {
   const url = endpoint.startsWith("/") ? endpoint : `/${endpoint}`
   const [pathname, queryString = ""] = url.split("?")
-  const query = new URLSearchParams(queryString)
-  const method = ((options.method || "GET").toUpperCase() as MockMethod) ?? "GET"
+  return { pathname, query: new URLSearchParams(queryString) }
+}
 
-  // Simulate a small amount of latency so UI loading states stay visible.
-  await new Promise((resolve) => setTimeout(resolve, DEFAULT_DELAY_MS))
+async function runMock(
+  endpoint: string,
+  options: RequestInit
+): Promise<Response | null> {
+  const { pathname, query } = normalizePath(endpoint)
+  const method =
+    ((options.method || "GET").toUpperCase() as MockMethod) ?? "GET"
 
   for (const route of mockRoutes) {
     if (route.method !== method) continue
     const params = matchRoute(route.pattern, pathname)
     if (!params) continue
+
+    await new Promise((resolve) => setTimeout(resolve, DEFAULT_DELAY_MS))
 
     const context: MockContext = {
       method,
@@ -67,7 +76,9 @@ async function fakeFetchHelper(
         {
           success: false,
           message:
-            error instanceof Error ? error.message : "Fake fetch handler error",
+            error instanceof Error
+              ? error.message
+              : "Fake fetch handler error",
           data: null,
         },
         { status: 500 }
@@ -75,6 +86,29 @@ async function fakeFetchHelper(
     }
   }
 
+  return null
+}
+
+/**
+ * Returns a mock Response when a route matches, otherwise null.
+ * Intended for use inside `server-fetch` as an opt-in intercept.
+ */
+export async function tryMockFetch(
+  endpoint: string,
+  options: RequestInit
+): Promise<Response | null> {
+  return runMock(endpoint, options)
+}
+
+async function fakeFetchHelper(
+  endpoint: string,
+  options: RequestInit
+): Promise<Response> {
+  const mocked = await runMock(endpoint, options)
+  if (mocked) return mocked
+
+  const { pathname } = normalizePath(endpoint)
+  const method = (options.method || "GET").toUpperCase()
   return makeResponse(
     {
       success: false,

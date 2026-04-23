@@ -11,6 +11,7 @@ export interface ProductListItem {
   isOffered?: boolean
   categoryId: string
   brandId: string
+  tags?: string[]
   createdAt?: string
   updatedAt?: string
   category?: {

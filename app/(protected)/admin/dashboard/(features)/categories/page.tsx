@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/table"
 import { getCategories } from "@/services/category/get-categories"
 
-import CopyIdButton from "../_shared/CopyIdButton"
 import AddCategoryButton from "./_components/AddCategoryButton"
+import DeleteCategoryButton from "./_components/DeleteCategoryButton"
+import EditCategoryButton from "./_components/EditCategoryButton"
 
 const formatDate = (value?: string) => {
   if (!value) return "—"
@@ -65,8 +66,8 @@ const CategoriesPage = async () => {
         {categories.length === 0 ? (
           <div className="px-6 py-12 text-center text-sm text-muted-foreground">
             No categories yet. Use{" "}
-            <span className="font-medium text-foreground">Add category</span> to
-            create your first one.
+            <span className="font-medium text-foreground">Add category</span>{" "}
+            to create your first one.
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -75,8 +76,8 @@ const CategoriesPage = async () => {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Slug</TableHead>
-                  <TableHead>ID</TableHead>
-                  <TableHead className="text-right">Created</TableHead>
+                  <TableHead>Created</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -90,11 +91,19 @@ const CategoriesPage = async () => {
                         {category.slug}
                       </code>
                     </TableCell>
-                    <TableCell>
-                      <CopyIdButton id={category.id} />
-                    </TableCell>
-                    <TableCell className="text-right text-sm text-muted-foreground">
+                    <TableCell className="text-sm text-muted-foreground">
                       {formatDate(category.createdAt)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <EditCategoryButton
+                          category={{ id: category.id, name: category.name }}
+                        />
+                        <DeleteCategoryButton
+                          categoryId={category.id}
+                          categoryName={category.name}
+                        />
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

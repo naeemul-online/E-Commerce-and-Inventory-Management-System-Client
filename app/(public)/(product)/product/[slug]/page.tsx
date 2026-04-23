@@ -4,8 +4,8 @@ import { ProductDetailsPage } from "@/components/product"
 import {
   getProductBySlug,
   getAllProductSlugs,
-  getCollectionConfig,
-} from "@/lib/collections-data"
+} from "@/lib/products-data"
+import { getCollectionConfig } from "@/lib/collections-data"
 
 interface ProductPageProps {
   params: Promise<{
@@ -27,6 +27,7 @@ export async function generateMetadata({
   }
 
   const collectionConfig = getCollectionConfig(product.collectionSlug)
+  const primaryImage = product.images?.[0]?.url
 
   return {
     title: `${product.name} | Buy Online`,
@@ -34,7 +35,7 @@ export async function generateMetadata({
     openGraph: {
       title: product.name,
       description: `Buy ${product.name} from ${product.brand}. Price: ৳${product.price}`,
-      images: product.image ? [product.image] : [],
+      images: primaryImage ? [primaryImage] : [],
     },
   }
 }
@@ -52,12 +53,5 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound()
   }
 
-  const collectionConfig = getCollectionConfig(product.collectionSlug)
-
-  return (
-    <ProductDetailsPage
-      product={product}
-      collectionTitle={collectionConfig?.title || product.collectionSlug}
-    />
-  )
+  return <ProductDetailsPage product={product} />
 }

@@ -1,6 +1,6 @@
 "use server"
 
-import { serverFetch } from "@/lib/server-fetch"
+import { apiFetch } from "@/lib/api-fetch"
 import {
   ProductListItem,
   ProductListMeta,
@@ -115,7 +115,7 @@ export const getProducts = async (
     let data: ProductListResponse | null = null
 
     for (const endpoint of endpoints) {
-      const res = await serverFetch.get(endpoint)
+      const res = await apiFetch.get(endpoint)
 
       if (!res.ok) continue
 

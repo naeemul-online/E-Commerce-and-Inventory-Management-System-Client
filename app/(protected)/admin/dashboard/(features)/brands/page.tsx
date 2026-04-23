@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/table"
 import { getBrands } from "@/services/brand/get-brands"
 
-import CopyIdButton from "../_shared/CopyIdButton"
 import AddBrandButton from "./_components/AddBrandButton"
+import DeleteBrandButton from "./_components/DeleteBrandButton"
+import EditBrandButton from "./_components/EditBrandButton"
 
 const formatDate = (value?: string) => {
   if (!value) return "—"
@@ -51,10 +52,7 @@ const BrandsPage = async () => {
       <Card className="overflow-hidden border bg-card p-0 shadow-sm">
         <div className="flex items-center justify-between border-b px-4 py-3">
           <div className="flex items-center gap-2 text-sm font-medium">
-            <Tag
-              className="h-4 w-4 text-muted-foreground"
-              aria-hidden="true"
-            />
+            <Tag className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
             <span>All brands</span>
           </div>
           <span className="text-xs text-muted-foreground">
@@ -75,8 +73,8 @@ const BrandsPage = async () => {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Slug</TableHead>
-                  <TableHead>ID</TableHead>
-                  <TableHead className="text-right">Created</TableHead>
+                  <TableHead>Created</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -88,11 +86,19 @@ const BrandsPage = async () => {
                         {brand.slug}
                       </code>
                     </TableCell>
-                    <TableCell>
-                      <CopyIdButton id={brand.id} />
-                    </TableCell>
-                    <TableCell className="text-right text-sm text-muted-foreground">
+                    <TableCell className="text-sm text-muted-foreground">
                       {formatDate(brand.createdAt)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <EditBrandButton
+                          brand={{ id: brand.id, name: brand.name }}
+                        />
+                        <DeleteBrandButton
+                          brandId={brand.id}
+                          brandName={brand.name}
+                        />
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

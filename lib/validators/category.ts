@@ -10,3 +10,13 @@ export const createCategorySchema = z.object({
 
 export type CreateCategoryInput = z.input<typeof createCategorySchema>
 export type CreateCategoryOutput = z.output<typeof createCategorySchema>
+
+/**
+ * Update uses the same payload shape as create today. Exported as its own
+ * alias so callers read as intent ("updateCategorySchema") and so we can
+ * evolve the two independently (e.g. add `slug` override) without breaking
+ * create callers.
+ */
+export const updateCategorySchema = createCategorySchema
+export type UpdateCategoryInput = z.input<typeof updateCategorySchema>
+export type UpdateCategoryOutput = z.output<typeof updateCategorySchema>

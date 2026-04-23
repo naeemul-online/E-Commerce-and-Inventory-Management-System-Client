@@ -13,30 +13,74 @@ import {
   createBrandSchema,
 } from "@/lib/validators/brand"
 import { createBrand } from "@/services/brand/create-brand"
+import { updateBrand } from "@/services/brand/update-brand"
+
+type BrandFormMode = "create" | "edit"
 
 type BrandCreateFormProps = {
+  /** Defaults to "create" for backwards compatibility. */
+  mode?: BrandFormMode
+  /** Required when `mode === "edit"`. */
+  brandId?: string
+  /** Prefill used for edit mode. */
+  initial?: { name: string }
   onSuccess?: () => void
   onCancel?: () => void
 }
 
-const BrandCreateForm = ({ onSuccess, onCancel }: BrandCreateFormProps) => {
+/**
+ * Reusable form for both "Create" and "Edit" brand flows. The default export
+ * name is kept as `BrandCreateForm` to avoid touching every existing import;
+ * callers that edit just pass `mode="edit"` + `brandId`.
+ */
+const BrandCreateForm = ({
+  mode = "create",
+  brandId,
+  initial,
+  onSuccess,
+  onCancel,
+}: BrandCreateFormProps) => {
   const form = useForm<CreateBrandInput, unknown, CreateBrandOutput>({
     resolver: zodResolver(createBrandSchema),
-    defaultValues: { name: "" },
+    defaultValues: { name: initial?.name ?? "" },
   })
 
   async function onSubmit(values: CreateBrandOutput) {
-    const result = await createBrand(values)
+    const result =
+      mode === "edit" && brandId
+        ? await updateBrand(brandId, values)
+        : await createBrand(values)
 
     if (!result.success) {
-      toast.error(result.message || "Brand creation failed.")
+      toast.error(
+        result.message ||
+          (mode === "edit" ? "Brand update failed." : "Brand creation failed.")
+      )
       return
     }
 
-    toast.success(result.message || "Brand created successfully.")
-    form.reset({ name: "" })
+    toast.success(
+      result.message ||
+        (mode === "edit"
+          ? "Brand updated successfully."
+          : "Brand created successfully.")
+    )
+
+    if (mode === "create") {
+      form.reset({ name: "" })
+    }
     onSuccess?.()
   }
+
+  const isSubmitting = form.formState.isSubmitting
+  const submitLabel =
+    mode === "edit"
+      ? isSubmitting
+        ? "Saving..."
+        : "Save changes"
+      : isSubmitting
+        ? "Creating..."
+        : "Create brand"
 
   return (
     <form
@@ -49,7 +93,7 @@ const BrandCreateForm = ({ onSuccess, onCancel }: BrandCreateFormProps) => {
           name="name"
           label="Brand name"
           placeholder="e.g. Apple"
-          disabled={form.formState.isSubmitting}
+          disabled={isSubmitting}
         />
         <p className="text-xs text-muted-foreground">
           Slug is generated automatically from the name on the server.
@@ -62,7 +106,7 @@ const BrandCreateForm = ({ onSuccess, onCancel }: BrandCreateFormProps) => {
             type="button"
             variant="ghost"
             onClick={onCancel}
-            disabled={form.formState.isSubmitting}
+            disabled={isSubmitting}
           >
             Cancel
           </Button>
@@ -70,9 +114,9 @@ const BrandCreateForm = ({ onSuccess, onCancel }: BrandCreateFormProps) => {
         <Button
           type="submit"
           className="text-background"
-          disabled={form.formState.isSubmitting}
+          disabled={isSubmitting}
         >
-          {form.formState.isSubmitting ? "Creating..." : "Create brand"}
+          {submitLabel}
         </Button>
       </div>
     </form>

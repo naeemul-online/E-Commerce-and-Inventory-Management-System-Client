@@ -98,12 +98,21 @@ const serverFetchHelper = async (
 
   const url = endpoint.startsWith("/") ? endpoint : `/${endpoint}`
 
+  // When the caller passes FormData (e.g. multipart product create/update),
+  // the runtime must set the multipart boundary itself. Forcing
+  // `Content-Type: application/json` would break the upload.
+  const isFormDataBody =
+    typeof FormData !== "undefined" && restOptions.body instanceof FormData
+
+  const baseHeaders: HeadersInit = isFormDataBody
+    ? { ...headers }
+    : { "Content-Type": "application/json", ...headers }
+
   const response = await fetch(`${BACKEND_API_URL}${url}`, {
     ...restOptions,
     cache: restOptions.cache ?? "no-store",
     headers: {
-      "Content-Type": "application/json",
-      ...headers,
+      ...baseHeaders,
       ...(cookieHeader ? { Cookie: cookieHeader } : {}),
     },
   })
@@ -125,8 +134,7 @@ const serverFetchHelper = async (
     ...restOptions,
     cache: restOptions.cache ?? "no-store",
     headers: {
-      "Content-Type": "application/json",
-      ...headers,
+      ...baseHeaders,
       ...(retryCookieHeader ? { Cookie: retryCookieHeader } : {}),
     },
   })

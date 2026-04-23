@@ -25,8 +25,18 @@ function makeResponse(body: unknown, init: ResponseInit = {}): Response {
   })
 }
 
+/**
+ * Convert a raw request body into a plain JS object that mock handlers can
+ * reason about. Supports:
+ *   - JSON string bodies          → parsed object
+ *   - `FormData` with a `data`    → parsed `data` JSON merged with an
+ *     field plus optional          `images: string[]` of stub URLs derived
+ *     `images` file entries         from each uploaded File's name
+ *   - Everything else             → returned as-is
+ */
 function parseBody(options: RequestInit): unknown {
   if (!options.body) return undefined
+
   if (typeof options.body === "string") {
     try {
       return JSON.parse(options.body)
@@ -34,6 +44,39 @@ function parseBody(options: RequestInit): unknown {
       return options.body
     }
   }
+
+  if (typeof FormData !== "undefined" && options.body instanceof FormData) {
+    const fd = options.body
+    let base: Record<string, unknown> = {}
+    const dataField = fd.get("data")
+    if (typeof dataField === "string") {
+      try {
+        base = JSON.parse(dataField) as Record<string, unknown>
+      } catch {
+        base = { data: dataField }
+      }
+    }
+
+    const imageEntries = fd.getAll("images")
+    const imageUrls: string[] = []
+    for (const entry of imageEntries) {
+      if (typeof entry === "string") {
+        imageUrls.push(entry)
+      } else if (entry && typeof entry === "object" && "name" in entry) {
+        const name = (entry as File).name || "upload"
+        imageUrls.push(
+          `https://mock.local/uploads/${encodeURIComponent(name)}-${Date.now()}`
+        )
+      }
+    }
+
+    if (imageUrls.length > 0) {
+      base = { ...base, images: imageUrls }
+    }
+
+    return base
+  }
+
   return options.body
 }
 

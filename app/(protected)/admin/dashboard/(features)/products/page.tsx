@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import AddProductButton from "./_components/AddProductButton"
 import DeleteProductButton from "./_components/DeleteProductButton"
+import EditProductButton from "./_components/EditProductButton"
 import AdminDataTable, {
   AdminDataTableColumn,
 } from "@/components/dashboard/AdminDataTable"
@@ -212,11 +214,12 @@ const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
           <Button asChild variant="outline" size="sm">
             <Link href={`/admin/inventory/products/${product.id}`}>View</Link>
           </Button>
-          <Button asChild variant="secondary" size="sm">
-            <Link href={`/admin/dashboard/products/${product.id}/edit`}>
-              Edit
-            </Link>
-          </Button>
+          <EditProductButton
+            productId={product.id}
+            fallback={product}
+            categories={categories}
+            brands={brands}
+          />
           <DeleteProductButton productId={product.id} />
         </div>
       ),
@@ -374,9 +377,11 @@ const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
                 </div>
               </div>
             </form>
-            <Button asChild className="w-full shrink-0 xl:w-auto xl:self-end">
-              <Link href="/admin/dashboard/products/new">Add product</Link>
-            </Button>
+            <AddProductButton
+              categories={categories}
+              brands={brands}
+              className="w-full shrink-0 xl:w-auto xl:self-end"
+            />
           </div>
         }
         title="All Products"

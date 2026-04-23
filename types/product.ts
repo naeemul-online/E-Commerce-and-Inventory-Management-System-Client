@@ -9,8 +9,10 @@ export interface ProductListItem {
   images?: string[]
   isNew?: boolean
   isOffered?: boolean
+  isPublished?: boolean
   categoryId: string
   brandId: string
+  tags?: string[]
   createdAt?: string
   updatedAt?: string
   category?: {

@@ -1,7 +1,19 @@
 import { deleteCookie, getCookie, setCookie } from "./tokenHelper"
+import { tryMockFetch } from "./fake-fetch"
 
 const BACKEND_API_URL =
   process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:5001/api/v1"
+
+/**
+ * When `NEXT_PUBLIC_USE_MOCK_API=true`, `serverFetch` first tries the local
+ * mock registry (see `lib/mocks/*.mock.ts`). If a route matches, the mock
+ * Response is returned. Otherwise the request falls through to the real
+ * backend unchanged. This lets every service keep calling `serverFetch` and
+ * swap to real HTTP in production with a single env change.
+ */
+const USE_MOCK_API =
+  process.env.NEXT_PUBLIC_USE_MOCK_API === "true" ||
+  process.env.USE_MOCK_API === "true"
 
 const authCookieOptions = {
   httpOnly: true,
@@ -75,18 +87,32 @@ const serverFetchHelper = async (
   endpoint: string,
   options: RequestInit
 ): Promise<Response> => {
+  if (USE_MOCK_API) {
+    const mocked = await tryMockFetch(endpoint, options)
+    if (mocked) return mocked
+  }
+
   const { headers, ...restOptions } = options
 
   const cookieHeader = await getCookieHeader()
 
   const url = endpoint.startsWith("/") ? endpoint : `/${endpoint}`
 
+  // When the caller passes FormData (e.g. multipart product create/update),
+  // the runtime must set the multipart boundary itself. Forcing
+  // `Content-Type: application/json` would break the upload.
+  const isFormDataBody =
+    typeof FormData !== "undefined" && restOptions.body instanceof FormData
+
+  const baseHeaders: HeadersInit = isFormDataBody
+    ? { ...headers }
+    : { "Content-Type": "application/json", ...headers }
+
   const response = await fetch(`${BACKEND_API_URL}${url}`, {
     ...restOptions,
     cache: restOptions.cache ?? "no-store",
     headers: {
-      "Content-Type": "application/json",
-      ...headers,
+      ...baseHeaders,
       ...(cookieHeader ? { Cookie: cookieHeader } : {}),
     },
   })
@@ -108,8 +134,7 @@ const serverFetchHelper = async (
     ...restOptions,
     cache: restOptions.cache ?? "no-store",
     headers: {
-      "Content-Type": "application/json",
-      ...headers,
+      ...baseHeaders,
       ...(retryCookieHeader ? { Cookie: retryCookieHeader } : {}),
     },
   })

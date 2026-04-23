@@ -2,12 +2,15 @@
 
 import { revalidatePath } from "next/cache"
 
+import { AuthError, requireAdmin } from "@/lib/auth-guards"
 import { serverFetch } from "@/lib/server-fetch"
 
 export const deleteProduct = async (
   productId: string
 ): Promise<{ success: boolean; message: string }> => {
   try {
+    await requireAdmin()
+
     const endpoints = [`/products/${productId}`, `/product/${productId}`]
 
     for (const endpoint of endpoints) {
@@ -27,6 +30,9 @@ export const deleteProduct = async (
 
     return { success: false, message: "Failed to delete product." }
   } catch (error) {
+    if (error instanceof AuthError) {
+      return { success: false, message: error.message }
+    }
     return {
       success: false,
       message:

@@ -1,11 +1,12 @@
+import { NextRequest, NextResponse } from "next/server"
+
 import {
   getDefaultDashboardRoute,
   getRouteOwner,
   isAuthRoute,
   UserRole,
 } from "@/lib/auth-utils"
-import jwt, { JwtPayload } from "jsonwebtoken"
-import { NextRequest, NextResponse } from "next/server"
+import { verifyAccessToken } from "@/lib/jwt"
 
 const BACKEND_API_URL =
   process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:5001/api/v1"
@@ -37,13 +38,15 @@ const withRefreshedTokens = (
   return response
 }
 
-const verifyUserRole = (accessToken: string) => {
-  const decoded = jwt.verify(
-    accessToken,
-    process.env.JWT_SECRET as string
-  ) as JwtPayload
-
-  return decoded.role as UserRole
+const readUserRole = async (
+  accessToken: string
+): Promise<UserRole | null> => {
+  try {
+    const claims = await verifyAccessToken(accessToken)
+    return claims.role ?? null
+  } catch {
+    return null
+  }
 }
 
 const refreshAccessToken = async (
@@ -79,7 +82,8 @@ const refreshAccessToken = async (
 
   const data = await response.json()
   const nextAccessToken = data?.data?.accessToken as string | undefined
-  const nextRefreshToken = (data?.data?.refreshToken as string | undefined) || null
+  const nextRefreshToken =
+    (data?.data?.refreshToken as string | undefined) || null
 
   if (!nextAccessToken) {
     return null
@@ -89,36 +93,33 @@ const refreshAccessToken = async (
 }
 
 export async function proxy(request: NextRequest) {
-  // ----------------------------------------------------------------------
-  // DEV ONLY: Auth bypass for UI development.
-  // Uncomment the block below (and remove this early return) to re-enable
-  // the protected route / role-based auth logic after development.
-  // ----------------------------------------------------------------------
-  return NextResponse.next()
-
-  /*
   const { pathname } = request.nextUrl
 
   let accessToken = request.cookies.get("accessToken")?.value || null
   let userRole: UserRole | null = null
-  let refreshedTokens: { accessToken: string; refreshToken: string | null } | null =
-    null
+  let refreshedTokens:
+    | { accessToken: string; refreshToken: string | null }
+    | null = null
 
   if (accessToken) {
-    try {
-      userRole = verifyUserRole(accessToken)
-    } catch {
+    userRole = await readUserRole(accessToken)
+
+    if (!userRole) {
       refreshedTokens = await refreshAccessToken(request)
 
       if (!refreshedTokens) {
+        // Public auth routes can still render without a valid session.
+        if (isAuthRoute(pathname)) {
+          return clearAuthCookies(NextResponse.next())
+        }
         const loginUrl = new URL("/login", request.url)
         return clearAuthCookies(NextResponse.redirect(loginUrl))
       }
-      accessToken = refreshedTokens.accessToken
 
-      try {
-        userRole = verifyUserRole(accessToken)
-      } catch {
+      accessToken = refreshedTokens.accessToken
+      userRole = await readUserRole(accessToken)
+
+      if (!userRole) {
         const loginUrl = new URL("/login", request.url)
         return clearAuthCookies(NextResponse.redirect(loginUrl))
       }
@@ -128,51 +129,47 @@ export async function proxy(request: NextRequest) {
   const routeOwner = getRouteOwner(pathname)
   const isAuth = isAuthRoute(pathname)
 
-  // Logged-in user visiting auth routes → send them to their dashboard
-  if (accessToken && isAuth) {
-    if (!userRole) {
-      return clearAuthCookies(NextResponse.redirect(new URL("/login", request.url)))
-    }
-
+  // Logged-in user visiting /login or /register → send them to their dashboard.
+  if (accessToken && userRole && isAuth) {
     return withRefreshedTokens(
-      NextResponse.redirect(new URL(getDefaultDashboardRoute(userRole), request.url)),
+      NextResponse.redirect(
+        new URL(getDefaultDashboardRoute(userRole), request.url)
+      ),
       refreshedTokens
     )
   }
 
-  // Public routes
+  // Public routes – no further checks needed.
   if (routeOwner === null) {
-    return NextResponse.next()
+    return withRefreshedTokens(NextResponse.next(), refreshedTokens)
   }
 
-  // Protected routes – unauthenticated
-  if (!accessToken) {
+  // Protected routes, but no session → force login and remember the target.
+  if (!accessToken || !userRole) {
     const loginUrl = new URL("/login", request.url)
-    loginUrl.searchParams.set("redirect", `${pathname}${request.nextUrl.search}`)
+    loginUrl.searchParams.set(
+      "redirect",
+      `${pathname}${request.nextUrl.search}`
+    )
     return NextResponse.redirect(loginUrl)
   }
 
-  // If we have a token but couldn't read a role, treat it as unauthenticated
-  if (!userRole) {
-    const loginUrl = new URL("/login", request.url)
-    return clearAuthCookies(NextResponse.redirect(loginUrl))
-  }
-
-  // Common protected routes are accessible to any authenticated role
+  // Common protected routes (profile / settings / account) — any role allowed.
   if (routeOwner === "COMMON") {
     return withRefreshedTokens(NextResponse.next(), refreshedTokens)
   }
 
-  // Role-based protected routes
+  // Role-owned area (/admin, /super-admin, /user) — only the matching role.
   if (routeOwner !== userRole) {
     return withRefreshedTokens(
-      NextResponse.redirect(new URL(getDefaultDashboardRoute(userRole), request.url)),
+      NextResponse.redirect(
+        new URL(getDefaultDashboardRoute(userRole), request.url)
+      ),
       refreshedTokens
     )
   }
 
   return withRefreshedTokens(NextResponse.next(), refreshedTokens)
-  */
 }
 
 export const config = {
@@ -187,4 +184,3 @@ export const config = {
     "/account/:path*",
   ],
 }
-

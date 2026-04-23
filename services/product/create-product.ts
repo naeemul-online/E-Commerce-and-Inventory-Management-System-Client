@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 
+import { AuthError, requireAdmin } from "@/lib/auth-guards"
 import { serverFetch } from "@/lib/server-fetch"
 import type { ProductListItem } from "@/types/product"
 
@@ -26,6 +27,8 @@ export const createProduct = async (
   formData: FormData
 ): Promise<CreateProductResponse> => {
   try {
+    await requireAdmin()
+
     const res = await serverFetch.post("/product", { body: formData })
 
     const parsed = (await res.json().catch(() => null)) as
@@ -44,6 +47,9 @@ export const createProduct = async (
 
     return parsed
   } catch (error) {
+    if (error instanceof AuthError) {
+      return { success: false, message: error.message }
+    }
     return {
       success: false,
       message:

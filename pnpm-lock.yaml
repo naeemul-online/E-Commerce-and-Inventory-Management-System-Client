@@ -35,6 +35,9 @@ importers:
       form:
         specifier: link:@/components/ui/form
         version: link:@/components/ui/form
+      jose:
+        specifier: ^6.2.2
+        version: 6.2.2
       jsonwebtoken:
         specifier: ^9.0.3
         version: 9.0.3

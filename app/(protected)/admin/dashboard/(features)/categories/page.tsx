@@ -13,8 +13,7 @@ import {
 import { getCategories } from "@/services/category/get-categories"
 
 import AddCategoryButton from "./_components/AddCategoryButton"
-import DeleteCategoryButton from "./_components/DeleteCategoryButton"
-import EditCategoryButton from "./_components/EditCategoryButton"
+import CategoryRowActions from "./_components/CategoryRowActions"
 
 const formatDate = (value?: string) => {
   if (!value) return "—"
@@ -117,19 +116,13 @@ const CategoriesPage = async () => {
                       {formatDate(category.createdAt)}
                     </TableCell>
                     <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <EditCategoryButton
-                          category={{
-                            id: category.id,
-                            name: category.name,
-                            image: category.image ?? null,
-                          }}
-                        />
-                        <DeleteCategoryButton
-                          categoryId={category.id}
-                          categoryName={category.name}
-                        />
-                      </div>
+                      <CategoryRowActions
+                        category={{
+                          id: category.id,
+                          name: category.name,
+                          image: category.image ?? null,
+                        }}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}

@@ -16,20 +16,39 @@ import type { Category } from "@/types/category"
 import CategoryCreateForm from "./CategoryCreateForm"
 
 type EditCategoryButtonProps = {
-  category: Pick<Category, "id" | "name">
+  category: Pick<Category, "id" | "name" | "image">
+  /**
+   * When true, the trigger is non-interactive. Used by row-level wrappers
+   * that share a pending state (e.g. while a sibling delete request is in
+   * flight) so the admin cannot edit a row that is being removed.
+   */
+  disabled?: boolean
 }
 
-const EditCategoryButton = ({ category }: EditCategoryButtonProps) => {
+const EditCategoryButton = ({
+  category,
+  disabled = false,
+}: EditCategoryButtonProps) => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
 
+  const handleOpenChange = (next: boolean) => {
+    if (disabled && next) return
+    setOpen(next)
+  }
+
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet open={open} onOpenChange={handleOpenChange}>
       <Button
         type="button"
         variant="secondary"
         size="sm"
-        onClick={() => setOpen(true)}
+        disabled={disabled}
+        aria-disabled={disabled}
+        onClick={() => {
+          if (disabled) return
+          setOpen(true)
+        }}
       >
         Edit
       </Button>
@@ -48,7 +67,7 @@ const EditCategoryButton = ({ category }: EditCategoryButtonProps) => {
           <CategoryCreateForm
             mode="edit"
             categoryId={category.id}
-            initial={{ name: category.name }}
+            initial={{ name: category.name, image: category.image ?? null }}
             onSuccess={() => {
               setOpen(false)
               router.refresh()

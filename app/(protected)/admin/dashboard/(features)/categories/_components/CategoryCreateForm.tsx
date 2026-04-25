@@ -11,6 +11,12 @@ import TextField from "@/components/forms/TextField"
 import { Button } from "@/components/ui/button"
 import { FieldGroup } from "@/components/ui/field"
 import {
+  ACCEPTED_IMAGE_INPUT_ACCEPT,
+  ACCEPTED_IMAGE_MIME_TYPES,
+  MAX_CATEGORY_IMAGE_BYTES,
+  formatBytes,
+} from "@/lib/constants/upload"
+import {
   type CreateCategoryInput,
   type CreateCategoryOutput,
   createCategorySchema,
@@ -29,8 +35,6 @@ type CategoryCreateFormProps = {
   onSuccess?: () => void
   onCancel?: () => void
 }
-
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024 // 5 MB
 
 /**
  * Reusable Create + Edit form. Image is managed outside Zod because zod's
@@ -80,13 +84,17 @@ const CategoryCreateForm = ({
       setImageFile(null)
       return
     }
-    if (!file.type.startsWith("image/")) {
-      setImageError("Please choose an image file.")
+    if (
+      !(ACCEPTED_IMAGE_MIME_TYPES as readonly string[]).includes(file.type)
+    ) {
+      setImageError("Only JPG, PNG, WebP, or AVIF images are allowed.")
       event.target.value = ""
       return
     }
-    if (file.size > MAX_IMAGE_BYTES) {
-      setImageError("Image must be 5 MB or smaller.")
+    if (file.size > MAX_CATEGORY_IMAGE_BYTES) {
+      setImageError(
+        `Image must be ${formatBytes(MAX_CATEGORY_IMAGE_BYTES)} or smaller.`
+      )
       event.target.value = ""
       return
     }
@@ -188,7 +196,7 @@ const CategoryCreateForm = ({
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept={ACCEPTED_IMAGE_INPUT_ACCEPT}
             className="sr-only"
             onChange={handleFileChange}
             disabled={isSubmitting}
@@ -225,12 +233,15 @@ const CategoryCreateForm = ({
           </div>
 
           {imageError ? (
-            <p className="text-xs text-destructive">{imageError}</p>
+            <p className="text-xs text-destructive" role="alert">
+              {imageError}
+            </p>
           ) : (
             <p className="text-xs text-muted-foreground">
-              PNG, JPG, or WEBP up to 5 MB.
+              JPG, PNG, WebP, or AVIF up to{" "}
+              {formatBytes(MAX_CATEGORY_IMAGE_BYTES)}.
               {isEditMode
-                ? " Leave empty to keep the current image."
+                ? " Leave empty to keep the current image — replacing it removes the old one automatically."
                 : ""}
             </p>
           )}

@@ -178,13 +178,32 @@ const CategoryCreateForm = ({
             )}
           >
             {visibleImage ? (
-              <Image
-                src={visibleImage}
-                alt={initial?.name ? `${initial.name} preview` : "Category preview"}
-                fill
-                sizes="(max-width: 640px) 100vw, 400px"
-                className="object-cover"
-              />
+              previewUrl ? (
+                // Local object URL (blob:) — next/image rejects unknown
+                // protocols, so render a plain <img> for the picker preview.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={previewUrl}
+                  alt={
+                    initial?.name
+                      ? `${initial.name} preview`
+                      : "Category preview"
+                  }
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              ) : (
+                <Image
+                  src={visibleImage}
+                  alt={
+                    initial?.name
+                      ? `${initial.name} preview`
+                      : "Category preview"
+                  }
+                  fill
+                  sizes="(max-width: 640px) 100vw, 400px"
+                  className="object-cover"
+                />
+              )
             ) : (
               <div className="flex flex-col items-center gap-1 text-muted-foreground">
                 <ImagePlus className="h-6 w-6" aria-hidden="true" />

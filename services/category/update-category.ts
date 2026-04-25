@@ -4,21 +4,32 @@ import { revalidatePath } from "next/cache"
 
 import { AuthError, requireAdmin } from "@/lib/auth-guards"
 import { serverFetch } from "@/lib/server-fetch"
-import { UpdateCategoryOutput } from "@/lib/validators/category"
 import { CreateCategoryResponse } from "@/types/category"
 
+/**
+ * Update endpoint mirrors create — multipart `FormData` with `name` and an
+ * optional new `image` file. If `image` is omitted, the existing image on
+ * the server is preserved.
+ */
 export const updateCategory = async (
   id: string,
-  payload: UpdateCategoryOutput
+  formData: FormData
 ): Promise<CreateCategoryResponse> => {
   try {
     await requireAdmin()
 
-    const res = await serverFetch.patch(`/category/${id}`, {
-      body: JSON.stringify(payload),
-    })
+    const res = await serverFetch.patch(`/category/${id}`, { body: formData })
 
-    const data = (await res.json()) as CreateCategoryResponse
+    const data = (await res.json().catch(() => ({}))) as CreateCategoryResponse
+
+    if (!res.ok) {
+      return {
+        success: false,
+        message:
+          data?.message ||
+          `Failed to update category (status ${res.status}).`,
+      }
+    }
 
     if (data?.success) {
       revalidatePath("/admin/dashboard/categories")

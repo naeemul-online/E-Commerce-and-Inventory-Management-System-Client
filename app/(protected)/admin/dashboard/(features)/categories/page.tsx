@@ -1,4 +1,5 @@
-import { FolderTree } from "lucide-react"
+import { FolderTree, ImageIcon } from "lucide-react"
+import Image from "next/image"
 
 import { Card } from "@/components/ui/card"
 import {
@@ -74,6 +75,7 @@ const CategoriesPage = async () => {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-[64px]">Image</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Slug</TableHead>
                   <TableHead>Created</TableHead>
@@ -83,6 +85,26 @@ const CategoriesPage = async () => {
               <TableBody>
                 {categories.map((category) => (
                   <TableRow key={category.id}>
+                    <TableCell>
+                      <div className="relative size-10 overflow-hidden rounded-md border bg-muted">
+                        {category.image ? (
+                          <Image
+                            src={category.image}
+                            alt={`${category.name} thumbnail`}
+                            fill
+                            sizes="40px"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                            <ImageIcon
+                              className="h-4 w-4"
+                              aria-hidden="true"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell className="font-medium">
                       {category.name}
                     </TableCell>
@@ -97,7 +119,11 @@ const CategoriesPage = async () => {
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
                         <EditCategoryButton
-                          category={{ id: category.id, name: category.name }}
+                          category={{
+                            id: category.id,
+                            name: category.name,
+                            image: category.image ?? null,
+                          }}
                         />
                         <DeleteCategoryButton
                           categoryId={category.id}

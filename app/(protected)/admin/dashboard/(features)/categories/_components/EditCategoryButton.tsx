@@ -16,7 +16,7 @@ import type { Category } from "@/types/category"
 import CategoryCreateForm from "./CategoryCreateForm"
 
 type EditCategoryButtonProps = {
-  category: Pick<Category, "id" | "name">
+  category: Pick<Category, "id" | "name" | "image">
 }
 
 const EditCategoryButton = ({ category }: EditCategoryButtonProps) => {
@@ -48,7 +48,7 @@ const EditCategoryButton = ({ category }: EditCategoryButtonProps) => {
           <CategoryCreateForm
             mode="edit"
             categoryId={category.id}
-            initial={{ name: category.name }}
+            initial={{ name: category.name, image: category.image ?? null }}
             onSuccess={() => {
               setOpen(false)
               router.refresh()
